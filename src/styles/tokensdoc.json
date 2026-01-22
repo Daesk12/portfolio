@@ -1,0 +1,353 @@
+[
+  {
+    "hex": "#fdfdfe",
+    "rgb": "rgb(253, 253, 254)",
+    "token": "titulo-50"
+  },
+  {
+    "hex": "#f9f9fb",
+    "rgb": "rgb(249, 249, 251)",
+    "token": "titulo-100"
+  },
+  {
+    "hex": "#f7f7f9",
+    "rgb": "rgb(247, 247, 249)",
+    "token": "titulo-200"
+  },
+  {
+    "hex": "#f3f3f6",
+    "rgb": "rgb(243, 243, 246)",
+    "token": "titulo-300"
+  },
+  {
+    "hex": "#f1f1f5",
+    "rgb": "rgb(241, 241, 245)",
+    "token": "titulo-400"
+  },
+  {
+    "hex": "#ededf2",
+    "rgb": "rgb(237, 237, 242)",
+    "token": "titulo-500"
+  },
+  {
+    "hex": "#d8d8dc",
+    "rgb": "rgb(216, 216, 220)",
+    "token": "titulo-600"
+  },
+  {
+    "hex": "#a8a8ac",
+    "rgb": "rgb(168, 168, 172)",
+    "token": "titulo-700"
+  },
+  {
+    "hex": "#828285",
+    "rgb": "rgb(130, 130, 133)",
+    "token": "titulo-800"
+  },
+  {
+    "hex": "#646466",
+    "rgb": "rgb(100, 100, 102)",
+    "token": "titulo-900"
+  },
+
+  {
+    "hex": "#e8e8e9",
+    "rgb": "rgb(232, 232, 233)",
+    "token": "fondo-50"
+  },
+  {
+    "hex": "#b6b6bc",
+    "rgb": "rgb(182, 182, 188)",
+    "token": "fondo-100"
+  },
+  {
+    "hex": "#93939b",
+    "rgb": "rgb(147, 147, 155)",
+    "token": "fondo-200"
+  },
+  {
+    "hex": "#62626e",
+    "rgb": "rgb(98, 98, 110)",
+    "token": "fondo-300"
+  },
+  {
+    "hex": "#444451",
+    "rgb": "rgb(68, 68, 81)",
+    "token": "fondo-400"
+  },
+  {
+    "hex": "#151526",
+    "rgb": "rgb(21, 21, 38)",
+    "token": "fondo-500"
+  },
+  {
+    "hex": "#131323",
+    "rgb": "rgb(19, 19, 35)",
+    "token": "fondo-600"
+  },
+  {
+    "hex": "#0f0f1b",
+    "rgb": "rgb(15, 15, 27)",
+    "token": "fondo-700"
+  },
+  {
+    "hex": "#0c0c15",
+    "rgb": "rgb(12, 12, 21)",
+    "token": "fondo-800"
+  },
+  {
+    "hex": "#090910",
+    "rgb": "rgb(9, 9, 16)",
+    "token": "fondo-900"
+  },
+  {
+    "hex": "#f6f6f9",
+    "rgb": "rgb(246, 246, 249)",
+    "token": "subtitulos-50"
+  },
+  {
+    "hex": "#e3e4ec",
+    "rgb": "rgb(227, 228, 236)",
+    "token": "subtitulos-100"
+  },
+  {
+    "hex": "#d6d7e3",
+    "rgb": "rgb(214, 215, 227)",
+    "token": "subtitulos-200"
+  },
+  {
+    "hex": "#c3c5d6",
+    "rgb": "rgb(195, 197, 214)",
+    "token": "subtitulos-300"
+  },
+  {
+    "hex": "#b8b9ce",
+    "rgb": "rgb(184, 185, 206)",
+    "token": "subtitulos-400"
+  },
+  {
+    "hex": "#a6a8c2",
+    "rgb": "rgb(166, 168, 194)",
+    "token": "subtitulos-500"
+  },
+  {
+    "hex": "#9799b1",
+    "rgb": "rgb(151, 153, 177)",
+    "token": "subtitulos-600"
+  },
+  {
+    "hex": "#76778a",
+    "rgb": "rgb(118, 119, 138)",
+    "token": "subtitulos-700"
+  },
+  {
+    "hex": "#5b5c6b",
+    "rgb": "rgb(91, 92, 107)",
+    "token": "subtitulos-800"
+  },
+  {
+    "hex": "#464751",
+    "rgb": "rgb(70, 71, 81)",
+    "token": "subtitulos-900"
+  },
+  {
+    "hex": "#fdfdfe",
+    "rgb": "rgb(253, 253, 254)",
+    "token": "texto-50"
+  },
+  {
+    "hex": "#f9f9fb",
+    "rgb": "rgb(249, 249, 251)",
+    "token": "texto-100"
+  },
+  {
+    "hex": "#f7f7f9",
+    "rgb": "rgb(247, 247, 249)",
+    "token": "texto-200"
+  },
+  {
+    "hex": "#f3f3f6",
+    "rgb": "rgb(243, 243, 246)",
+    "token": "texto-300"
+  },
+  {
+    "hex": "#f1f1f5",
+    "rgb": "rgb(241, 241, 245)",
+    "token": "texto-400"
+  },
+  {
+    "hex": "#ededf2",
+    "rgb": "rgb(237, 237, 242)",
+    "token": "texto-500"
+  },
+  {
+    "hex": "#d8d8dc",
+    "rgb": "rgb(216, 216, 220)",
+    "token": "texto-600"
+  },
+  {
+    "hex": "#a8a8ac",
+    "rgb": "rgb(168, 168, 172)",
+    "token": "texto-700"
+  },
+  {
+    "hex": "#828285",
+    "rgb": "rgb(130, 130, 133)",
+    "token": "texto-800"
+  },
+  {
+    "hex": "#646466",
+    "rgb": "rgb(100, 100, 102)",
+    "token": "texto-900"
+  },
+  {
+    "hex": "#ffebeb",
+    "rgb": "rgb(255, 235, 235)",
+    "token": "error-50"
+  },
+  {
+    "hex": "#ffc2c2",
+    "rgb": "rgb(255, 194, 194)",
+    "token": "error-100"
+  },
+  {
+    "hex": "#ffa5a5",
+    "rgb": "rgb(255, 165, 165)",
+    "token": "error-200"
+  },
+  {
+    "hex": "#ff7c7c",
+    "rgb": "rgb(255, 124, 124)",
+    "token": "error-300"
+  },
+  {
+    "hex": "#ff6262",
+    "rgb": "rgb(255, 98, 98)",
+    "token": "error-400"
+  },
+  {
+    "hex": "#ff3b3b",
+    "rgb": "rgb(255, 59, 59)",
+    "token": "error-500"
+  },
+  {
+    "hex": "#e83636",
+    "rgb": "rgb(232, 54, 54)",
+    "token": "error-600"
+  },
+  {
+    "hex": "#b52a2a",
+    "rgb": "rgb(181, 42, 42)",
+    "token": "error-700"
+  },
+  {
+    "hex": "#8c2020",
+    "rgb": "rgb(140, 32, 32)",
+    "token": "error-800"
+  },
+  {
+    "hex": "#6b1919",
+    "rgb": "rgb(107, 25, 25)",
+    "token": "error-900"
+  },
+  {
+    "hex": "#ecfff5",
+    "rgb": "rgb(236, 255, 245)",
+    "token": "terminal-50"
+  },
+  {
+    "hex": "#c3ffe1",
+    "rgb": "rgb(195, 255, 225)",
+    "token": "terminal-100"
+  },
+  {
+    "hex": "#a5ffd2",
+    "rgb": "rgb(165, 255, 210)",
+    "token": "terminal-200"
+  },
+  {
+    "hex": "#7cffbe",
+    "rgb": "rgb(124, 255, 190)",
+    "token": "terminal-300"
+  },
+  {
+    "hex": "#63ffb1",
+    "rgb": "rgb(99, 255, 177)",
+    "token": "terminal-400"
+  },
+  {
+    "hex": "#3cff9e",
+    "rgb": "rgb(60, 255, 158)",
+    "token": "terminal-500"
+  },
+  {
+    "hex": "#37e890",
+    "rgb": "rgb(55, 232, 144)",
+    "token": "terminal-600"
+  },
+  {
+    "hex": "#2bb570",
+    "rgb": "rgb(43, 181, 112)",
+    "token": "terminal-700"
+  },
+  {
+    "hex": "#218c57",
+    "rgb": "rgb(33, 140, 87)",
+    "token": "terminal-800"
+  },
+  {
+    "hex": "#196b42",
+    "rgb": "rgb(25, 107, 66)",
+    "token": "terminal-900"
+  },
+  {
+    "hex": "#f2f2ff",
+    "rgb": "rgb(242, 242, 255)",
+    "token": "acento-50"
+  },
+  {
+    "hex": "#d6d7ff",
+    "rgb": "rgb(214, 215, 255)",
+    "token": "acento-100"
+  },
+  {
+    "hex": "#c2c4ff",
+    "rgb": "rgb(194, 196, 255)",
+    "token": "acento-200"
+  },
+  {
+    "hex": "#a6a9ff",
+    "rgb": "rgb(166, 169, 255)",
+    "token": "acento-300"
+  },
+  {
+    "hex": "#9599ff",
+    "rgb": "rgb(149, 153, 255)",
+    "token": "acento-400"
+  },
+  {
+    "hex": "#7a7fff",
+    "rgb": "rgb(122, 127, 255)",
+    "token": "acento-500"
+  },
+  {
+    "hex": "#6f74e8",
+    "rgb": "rgb(111, 116, 232)",
+    "token": "acento-600"
+  },
+  {
+    "hex": "#575ab5",
+    "rgb": "rgb(87, 90, 181)",
+    "token": "acento-700"
+  },
+  {
+    "hex": "#43468c",
+    "rgb": "rgb(67, 70, 140)",
+    "token": "acento-800"
+  },
+  {
+    "hex": "#33356b",
+    "rgb": "rgb(51, 53, 107)",
+    "token": "acento-900"
+  }
+]

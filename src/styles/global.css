@@ -1,7 +1,25 @@
-@import "tailwindcss";
+@config "../../tailwind.config.cjs";
+
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+:root {
+  --bg-page: #151526;
+  --bg-surface: #131323;
+
+  --text-primary: #ededf2;
+  --text-secondary: #a6a8c2;
+
+  --title-primary: #ededf2;
+
+  --accent: #7a7fff;
+
+  --error: #ff3b3b;
+  --success: #3cff9e;
 }
