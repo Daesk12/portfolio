@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/fonts.css';
+import Nav from '../components/Nav.astro';
 ---
 
 <!doctype html>
@@ -10,7 +11,63 @@ import '../styles/fonts.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Betell</title>
   </head>
-  <body class="bg-page text-primary">
-    <slot />
+  <body>
+    <Nav />
+
+    <div id="main-content" class="min-h-screen w-full bg-page transition-all duration-300">
+      <slot />
+    </div>
+
+    <script>
+      const nav = document.querySelector('#nav-lateral') as HTMLElement | null;
+      const main = document.getElementById('main-content') as HTMLElement | null;
+
+      let isOpen = false;
+
+      const getNavOffset = () => {
+        return window.innerWidth * 0.25 - 10;
+      };
+
+      if (nav) {
+        nav.style.transform = `translateX(-${getNavOffset()}px)`;
+        nav.style.boxShadow = '8px 0 20px rgba(0, 0, 0, 0.3)';
+      }
+
+      const toggleNav = () => {
+        if (!nav || !main) return;
+
+        isOpen = !isOpen;
+
+        if (isOpen) {
+          main.style.transform = `translateX(${window.innerWidth * 0.25}px)`;
+          nav.style.transform = 'translateX(0)';
+          nav.style.boxShadow = 'none';
+          nav.classList.add('open');
+        } else {
+          main.style.transform = 'translateX(0)';
+          nav.style.transform = `translateX(-${getNavOffset()}px)`;
+          nav.style.boxShadow = '8px 0 20px rgba(0, 0, 0, 0.5)';
+          nav.classList.remove('open');
+        }
+      };
+
+      if (nav) {
+        nav.addEventListener('click', (e) => {
+          const target = e.target as HTMLElement | null;
+          if (!target) return;
+
+          if (
+            target.closest('a') ||
+            target.closest('button') ||
+            target.closest('h3') ||
+            target.closest('h4')
+          ) {
+            return;
+          }
+
+          toggleNav();
+        });
+      }
+    </script>
   </body>
 </html>
