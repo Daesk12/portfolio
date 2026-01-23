@@ -26,8 +26,46 @@ body {
   --success: #3cff9e;
 }
 
-#nav-lateral:hover:not(.open) {
-  box-shadow: 12px 0 30px rgba(0, 0, 0, 0.705) !important;
+#nav-lateral {
+  transform: translateX(calc(-25vw + 10px));
+  transition: transform 300ms ease;
+}
+
+body:not(.nav-open) #nav-lateral:hover {
+  box-shadow: 12px 0 30px rgba(0, 0, 0, 0.705);
+}
+
+#nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 25vw;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 40;
+}
+
+body.nav-open #nav-overlay {
+  pointer-events: all;
+}
+
+body.nav-open #nav-lateral {
+  transform: translateX(0);
+}
+
+body.nav-open #main-content {
+  margin-left: 25vw;
+  width: calc(100vw - 25vw);
+}
+
+/* ===== MAIN CONTENT ===== */
+#main-content {
+  width: calc(100vw - var(--nav-offset, 10px));
+  margin-left: var(--nav-offset, 10px);
+  transition:
+    margin 300ms ease,
+    width 300ms ease;
 }
 
 .preview-scroll::-webkit-scrollbar {

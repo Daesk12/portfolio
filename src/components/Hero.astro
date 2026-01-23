@@ -1,11 +1,80 @@
 ---
-
+import BetellSvg from '../assets/betell.svg?raw';
 ---
 
-<header class="pt-60">
-  
-</header>
+<div id="hero-wrapper">
+  <header id="hero-trigger" class="pt-16 w-full" style="min-height:170vh">
+    <div id="hero-pin-wrapper">
+      <div id="hero-pin" class="flex flex-col items-center w-full gap-5">
+        <div id="betell-wrapper" class="w-full flex justify-center">
+          <div id="betell-scale">
+            <Fragment set:html={BetellSvg} />
+          </div>
+        </div>
+
+        <p id="hero-text" class="text-caption font-700 tracking-wider font-manrope text-primary">
+          CONTANDO HISTORIAS CON CADA DISEÑO.
+        </p>
+      </div>
+    </div>
+  </header>
+</div>
+
+<style>
+  #hero-wrapper {
+    transition: margin 0.3s ease;
+  }
+
+  #betell-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  #betell-scale {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    transform-origin: center top;
+  }
+
+  #betell-scale svg {
+    width: 100%;
+    height: auto;
+    transform-origin: center top;
+    transform-box: fill-box;
+  }
+</style>
 
 <script>
-  import { gsap, ScrollTrigger } from "../lib/gsap";
+  import { gsap, ScrollTrigger } from '../lib/gsap';
+
+  const heroPin = document.getElementById('hero-pin');
+  const heroText = document.getElementById('hero-text');
+  const trigger = document.getElementById('hero-trigger');
+  const betellScale = document.getElementById('betell-scale');
+  if (!trigger) throw new Error('Hero trigger no encontrado');
+
+  const heroTextY = () => {
+    const heroHeight = trigger.getBoundingClientRect().height;
+    return Math.min(heroHeight * 0.35, 550);
+  };
+
+  gsap.set(betellScale, { scaleY: 1, transformOrigin: 'center top' });
+  gsap.set(heroText, { y: 0, letterSpacing: '0.05em' });
+
+  const anim = gsap.timeline({
+    scrollTrigger: {
+      trigger: trigger,
+      pin: heroPin,
+      start: 'top top',
+      end: '+=150%',
+      scrub: 1,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  anim.to(betellScale, { scaleY: 3, duration: 1.5, ease: 'none' }, 0);
+  anim.to(heroText, { y: heroTextY(), duration: 1.5, ease: 'none' }, 0);
+  anim.to(heroText, { letterSpacing: '0.5em', duration: 1.5, ease: 'none' }, 0);
 </script>

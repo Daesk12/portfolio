@@ -11,63 +11,71 @@ import Nav from '../components/Nav.astro';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Betell</title>
   </head>
-  <body>
-    <Nav />
 
-    <div id="main-content" class="min-h-screen w-full bg-page transition-all duration-300">
-      <slot />
-    </div>
+  <body class="overflow-x-hidden">
+    <Nav />
+    <div id="nav-overlay"></div>
+
+    <main id="main-content" class="min-h-screen bg-page transition-[margin,width] duration-300">
+      <div class="h-full px-24">
+        <slot />
+      </div>
+    </main>
 
     <script>
-      const nav = document.querySelector('#nav-lateral') as HTMLElement | null;
-      const main = document.getElementById('main-content') as HTMLElement | null;
+      import { gsap, ScrollTrigger } from '../lib/gsap';
+      const nav = document.getElementById('nav-lateral');
+      const overlay = document.getElementById('nav-overlay');
 
+      const TAB_WIDTH = 10;
       let isOpen = false;
 
-      const getNavOffset = () => {
-        return window.innerWidth * 0.25 - 10;
+      const setNavOffset = (value: number) => {
+        document.documentElement.style.setProperty('--nav-offset', `${value}px`);
       };
 
-      if (nav) {
-        nav.style.transform = `translateX(-${getNavOffset()}px)`;
-        nav.style.boxShadow = '8px 0 20px rgba(0, 0, 0, 0.3)';
-      }
+      setNavOffset(TAB_WIDTH);
 
-      const toggleNav = () => {
-        if (!nav || !main) return;
+      const openNav = () => {
+        if (!nav) return;
+        const navWidth = nav.getBoundingClientRect().width;
+        isOpen = true;
+        setNavOffset(navWidth);
+        document.body.classList.add('nav-open');
+        ScrollTrigger.refresh(true);
+      };
 
-        isOpen = !isOpen;
+      const closeNav = () => {
+        isOpen = false;
+        setNavOffset(TAB_WIDTH);
+        document.body.classList.remove('nav-open');
+        ScrollTrigger.refresh(true);
+      };
 
+      nav?.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!target) return;
+        const el = target instanceof Element ? target : null;
+        if (el && (el.closest('a') || el.closest('button') || el.closest('h3') || el.closest('h4')))
+          return;
+
+        isOpen ? closeNav() : openNav();
+      });
+
+      overlay?.addEventListener('click', closeNav);
+
+      window.addEventListener('resize', () => {
+        if (!nav) return;
+        const navWidth = nav.getBoundingClientRect().width;
         if (isOpen) {
-          main.style.transform = `translateX(${window.innerWidth * 0.25}px)`;
-          nav.style.transform = 'translateX(0)';
-          nav.style.boxShadow = 'none';
-          nav.classList.add('open');
+          setNavOffset(navWidth);
+          document.body.classList.add('nav-open');
         } else {
-          main.style.transform = 'translateX(0)';
-          nav.style.transform = `translateX(-${getNavOffset()}px)`;
-          nav.style.boxShadow = '8px 0 20px rgba(0, 0, 0, 0.5)';
-          nav.classList.remove('open');
+          setNavOffset(TAB_WIDTH);
+          document.body.classList.remove('nav-open');
         }
-      };
-
-      if (nav) {
-        nav.addEventListener('click', (e) => {
-          const target = e.target as HTMLElement | null;
-          if (!target) return;
-
-          if (
-            target.closest('a') ||
-            target.closest('button') ||
-            target.closest('h3') ||
-            target.closest('h4')
-          ) {
-            return;
-          }
-
-          toggleNav();
-        });
-      }
+        ScrollTrigger.refresh(true);
+      });
     </script>
   </body>
 </html>
