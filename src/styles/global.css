@@ -64,8 +64,8 @@ body.nav-open #main-content {
   width: calc(100vw - var(--nav-offset, 10px));
   margin-left: var(--nav-offset, 10px);
   transition:
-    margin 300ms ease,
-    width 300ms ease;
+    margin 200ms linear,
+    width 200ms linear;
 }
 
 .preview-scroll::-webkit-scrollbar {

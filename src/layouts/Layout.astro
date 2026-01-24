@@ -17,7 +17,7 @@ import Nav from '../components/Nav.astro';
     <div id="nav-overlay"></div>
 
     <main id="main-content" class="min-h-screen bg-page transition-[margin,width] duration-300">
-      <div class="h-full px-24">
+      <div class="h-full">
         <slot />
       </div>
     </main>
@@ -42,14 +42,14 @@ import Nav from '../components/Nav.astro';
         isOpen = true;
         setNavOffset(navWidth);
         document.body.classList.add('nav-open');
-        ScrollTrigger.refresh(true);
+        setTimeout(() => ScrollTrigger.refresh(true), 100);
       };
 
       const closeNav = () => {
         isOpen = false;
         setNavOffset(TAB_WIDTH);
         document.body.classList.remove('nav-open');
-        ScrollTrigger.refresh(true);
+        setTimeout(() => ScrollTrigger.refresh(true), 100);
       };
 
       nav?.addEventListener('click', (e) => {
@@ -70,11 +70,12 @@ import Nav from '../components/Nav.astro';
         if (isOpen) {
           setNavOffset(navWidth);
           document.body.classList.add('nav-open');
+          setTimeout(() => ScrollTrigger.refresh(true), 100);
         } else {
           setNavOffset(TAB_WIDTH);
           document.body.classList.remove('nav-open');
+          setTimeout(() => ScrollTrigger.refresh(true), 100);
         }
-        ScrollTrigger.refresh(true);
       });
     </script>
   </body>

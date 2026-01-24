@@ -2,7 +2,7 @@
 import BetellSvg from '../assets/betell.svg?raw';
 ---
 
-<div id="hero-wrapper">
+<div id="hero-wrapper" class="px-24">
   <header id="hero-trigger" class="pt-16 w-full" style="min-height:170vh">
     <div id="hero-pin-wrapper">
       <div id="hero-pin" class="flex flex-col items-center w-full gap-5">
@@ -12,7 +12,9 @@ import BetellSvg from '../assets/betell.svg?raw';
           </div>
         </div>
 
-        <p id="hero-text" class="text-caption font-700 tracking-wider font-manrope text-primary">
+        <p
+          id="hero-text"
+          class="text-caption font-700 tracking-wider font-manrope text-primary text-center">
           CONTANDO HISTORIAS CON CADA DISEÑO.
         </p>
       </div>
@@ -21,6 +23,18 @@ import BetellSvg from '../assets/betell.svg?raw';
 </div>
 
 <style>
+  #hero-pin-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  #hero-pin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   #hero-wrapper {
     transition: margin 0.3s ease;
   }
@@ -57,7 +71,7 @@ import BetellSvg from '../assets/betell.svg?raw';
 
   const heroTextY = () => {
     const heroHeight = trigger.getBoundingClientRect().height;
-    return Math.min(heroHeight * 0.35, 550);
+    return Math.min(heroHeight * 0.35, 450);
   };
 
   gsap.set(betellScale, { scaleY: 1, transformOrigin: 'center top' });
@@ -68,9 +82,10 @@ import BetellSvg from '../assets/betell.svg?raw';
       trigger: trigger,
       pin: heroPin,
       start: 'top top',
-      end: '+=150%',
+      end: '+=50%',
       scrub: 1,
       invalidateOnRefresh: true,
+      pinSpacing: false,
     },
   });
 

@@ -2,10 +2,90 @@
 
 ---
 
-<section>
-  
+<section id="sec1" class="bg-accent w-full p-20 flex flex-col items-center overflow-y-hidden">
+  <div id="sec1-content" class="flex flex-col gap-5 items-center">
+    <h1
+      id="mantxt"
+      class="text-center text-h1 text-muted font-outfit font-700 leading-sm kerning-wider uppercase">
+      Diseño para conectar, creando mensajes que se entienden sin explicarse de más, desde la
+      cercanía, la accesibilidad y el amor hacia las personas.
+    </h1>
+    <h2
+      id="manprog"
+      class="text-center text-h1 text-muted font-outfit font-900 leading-l kerning-wider">
+      0%
+    </h2>
+  </div>
 </section>
 
 <script>
-  import { gsap, ScrollTrigger } from "../lib/gsap";
+  import { gsap, ScrollTrigger } from '../lib/gsap';
+
+  const sec1 = document.getElementById('sec1');
+  const content = document.getElementById('sec1-content');
+  const leer = document.getElementById('mantxt');
+  const progresst = document.getElementById('manprog');
+
+  if (!sec1 || !content || !leer || !progresst) {
+    throw new Error('Elementos no encontrados en sec1');
+  }
+
+  // Separar texto en palabras
+  const palabras = leer.textContent.split(' ');
+  leer.textContent = '';
+  palabras.forEach((palabra, i) => {
+    const span = document.createElement('span');
+    span.textContent = palabra + ' ';
+    span.style.opacity = i === 0 ? '1' : '0.3';
+    leer.appendChild(span);
+  });
+
+  const spans = leer.querySelectorAll('span');
+  const totalSpans = spans.length;
+  gsap.set(spans, { opacity: (i) => (i === 0 ? 1 : 0.3) });
+
+  // Función para crear ScrollTrigger dinámicamente
+  const createScrollTrigger = () => {
+    const viewportHeight = window.innerHeight;
+    const contentHeight = content.scrollHeight;
+
+    // Distancia mínima de scroll = mitad del contenido si no cabe en viewport
+    const scrollDistance = Math.max(contentHeight - viewportHeight, contentHeight * 0.5);
+
+    return gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: sec1,
+          start: 'top+=50px top', // <--- pin empieza 50px después de entrar a la sección
+          end: `+=${scrollDistance}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: 1,
+        },
+      })
+      .to(spans, {
+        opacity: 1,
+        stagger: {
+          each: 0.03,
+        },
+
+        ease: 'none',
+        onUpdate: function () {
+          progresst.textContent = `${Math.round(this.progress() * 100)}%`;
+        },
+      });
+  };
+
+  let anim = createScrollTrigger();
+
+  // Refrescar ScrollTrigger
+  const refreshTrigger = () => {
+    anim.kill();
+    ScrollTrigger.refresh(true);
+    anim = createScrollTrigger();
+  };
+
+  window.addEventListener('resize', refreshTrigger);
+
+  (window as any).refreshSec1Scroll = refreshTrigger;
 </script>
