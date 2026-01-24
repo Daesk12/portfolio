@@ -1,11 +1,97 @@
 ---
-
+import { projects } from '../data/projects';
+import type { Project } from '../data/projects';
 ---
 
-<section>
-  
+<section id="sec2" class="w-full h-auto p-20 flex flex-col gap-10">
+  <div class="flex justify-between items-center">
+    <h2
+      class="uppercase text-primary font-manrope font-700 text-caption tracking-wider underline underline-offset-8">
+      PROYECTOS DESTACADOS
+    </h2>
+    <div class="flex gap-5 justify-center items-center w-2/5">
+      <button
+        data-view="grid"
+        class="boton-activo p-2 font-outfit font-500 text-button w-2/5 rounded-lg border-2 border-secondary text-primary">
+        Grid
+      </button>
+      <button
+        data-view="list"
+        class="boton-activo p-2 font-outfit font-500 text-button w-2/5 rounded-lg border-2 border-secondary text-primary">
+        Lista
+      </button>
+    </div>
+  </div>
+
+  <div id="projects" class="projects grid-view transition-all duration-300">
+    <!-- Projects will be dynamically loaded here -->
+    {
+      projects.map((project: Project) => (
+        <article class="project-card">
+          <div class="project-image">
+            <img
+              src={project.image}
+              alt={project.title}
+              class="w-full rounded-lg h-full object-cover"
+            />
+          </div>
+
+          <div class="project-overlay project-info gap-2">
+            <h3>
+              {project.title}
+            </h3>
+            <div class="flex-cont">
+              <span>
+                ({project.year})
+              </span>
+              <p>
+                {project.category}
+              </p>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
 </section>
 
 <script>
-  import { gsap, ScrollTrigger } from "../lib/gsap";
+  type Vista = 'grid' | 'list';
+
+  const container = document.getElementById('projects');
+  const buttons = document.querySelectorAll<HTMLElement>('.boton-activo');
+
+  if (!container) {
+    throw new Error('Container #projects no encontrado');
+  }
+
+  let vistaActual: Vista = 'grid';
+
+  const actualizarVista = (vista: Vista) => {
+    vistaActual = vista;
+
+    // Cambiar layout
+    container.classList.toggle('grid-view', vista === 'grid');
+    container.classList.toggle('list-view', vista === 'list');
+
+    // Estado visual de botones
+    buttons.forEach((button) => {
+      const activo = button.dataset.view === vista;
+
+      button.classList.toggle('bg-secondary', activo);
+      button.classList.toggle('border-0', activo);
+      button.classList.toggle('text-muted', activo);
+      button.classList.toggle('text-primary', !activo);
+    });
+  };
+
+  // Eventos
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      actualizarVista(button.dataset.view as Vista);
+    });
+  });
+
+  // Estado inicial
+  actualizarVista(vistaActual);
 </script>

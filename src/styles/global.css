@@ -80,3 +80,61 @@ body.nav-open #main-content {
 .preview-scroll::-webkit-scrollbar-track {
   background-color: #1515266e;
 }
+
+.projects.grid-view {
+  @apply grid grid-cols-2 gap-10;
+}
+
+.projects.grid-view .project-card {
+  @apply relative overflow-hidden rounded-lg cursor-pointer;
+}
+
+.projects.grid-view .project-image {
+  @apply w-full aspect-video rounded-lg;
+}
+
+.projects.grid-view .project-overlay {
+  @apply absolute inset-0
+    flex flex-col justify-between
+    h-full
+    bg-page/60
+    opacity-0
+    transition-opacity duration-300
+    p-4;
+}
+
+.projects.grid-view .project-card:hover .project-overlay {
+  @apply opacity-100;
+}
+
+.projects.grid-view .project-info h3 {
+  @apply text-muted font-inconsolata text-caption bg-secondary p-2 tracking-wider rounded-lg w-fit font-800;
+}
+
+.projects.grid-view .project-info .flex-cont {
+  @apply flex flex-col gap-2;
+}
+
+.projects.grid-view .project-info span {
+  @apply text-muted font-outfit text-sm bg-secondary p-1 px-2 rounded-lg w-fit font-600;
+}
+
+.projects.grid-view .project-info p {
+  @apply text-muted font-outfit text-caption bg-secondary p-2 tracking-wide rounded-lg w-fit font-500 italic;
+}
+
+.projects.list-view {
+  @apply flex flex-col divide-y divide-muted;
+}
+
+.projects.list-view .project-card {
+  @apply flex items-center gap-8 py-6;
+}
+
+.projects.list-view .project-image {
+  @apply w-48 h-28 bg-muted rounded-lg shrink-0;
+}
+
+.projects.list-view .project-info {
+  @apply flex flex-row items-center gap-6;
+}

@@ -1,11 +1,30 @@
 ---
-
+import { Image } from 'astro:assets';
+import gato from '../assets/gatosec2.png';
 ---
 
-<section>
-  
-</section>
+<section id="sec2" class="w-full h-screen p-20 flex items-center justify-between">
+  <div id="sec2-cont1" class="w-2/5 flex flex-col gap-7.5">
+    <h2
+      class="uppercase text-primary font-manrope font-700 text-caption tracking-wider underline underline-offset-8">
+      ¿Quien soy?
+    </h2>
+    <p class="text-body text-primary font-400 leading-base font-manrope">
+      Soy Daniel, un diseñador enfocado en ir más allá de los medios convencionales, trabajo
+      principalmente en diseño web, diseño interactivo y proyectos de índole mixta que me permiten
+      darle rienda suelta a mi creatividad.
+    </p>
+    <button
+      class="text-button bg-secondary p-2.5 w-2/5 rounded-lg text-muted tracking-wider font-outfit font-medium cursor-pointer hover:bg-accent hover:text-primary"
+      >Sobre mi</button
+    >
+  </div>
 
-<script>
-  import { gsap, ScrollTrigger } from "../lib/gsap";
-</script>
+  <div id="sec2-cont2" class="w-2/5 flex flex-col gap-5 items-center">
+    <Image src={gato} alt="gatosec2" class="w-full h-auto" />
+    <p
+      class="text-caption tracking-wider uppercase text-primary leading-wide text-center font-700 font-manrope opacity-80">
+      MADE IN COLOMBIA <br /> AMANTE DE LA PROGRAMACIÓN Y LOS ANIMALES
+    </p>
+  </div>
+</section>
