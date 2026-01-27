@@ -54,13 +54,13 @@ body.nav-open #nav-lateral {
   transform: translateX(0);
 }
 
-body.nav-open #main-content {
+body.nav-open #page-content {
   margin-left: 25vw;
   width: calc(100vw - 25vw);
 }
 
 /* ===== MAIN CONTENT ===== */
-#main-content {
+#page-content {
   width: calc(100vw - var(--nav-offset, 10px));
   margin-left: var(--nav-offset, 10px);
   transition:

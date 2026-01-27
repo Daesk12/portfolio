@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import '../styles/fonts.css';
 import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 ---
 
 <!doctype html>
@@ -15,12 +16,14 @@ import Nav from '../components/Nav.astro';
   <body class="overflow-x-hidden">
     <Nav />
     <div id="nav-overlay"></div>
-
-    <main id="main-content" class="min-h-screen bg-page transition-[margin,width] duration-300">
-      <div class="h-full">
-        <slot />
-      </div>
-    </main>
+    <div id="page-content">
+      <main id="main-content" class="min-h-screen bg-page transition-[margin,width] duration-300">
+        <div class="h-full">
+          <slot />
+        </div>
+      </main>
+      <Footer />
+    </div>
 
     <script>
       import { gsap, ScrollTrigger } from '../lib/gsap';
