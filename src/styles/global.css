@@ -123,23 +123,24 @@ body.nav-open #page-content {
   @apply text-muted font-outfit text-caption bg-secondary p-2 tracking-wide rounded-lg w-fit font-500 italic;
 }
 
+/* ===== LIST VIEW ===== */
 .projects.list-view {
-  @apply flex flex-col -mx-20 px-20;
+  @apply flex flex-col;
 }
 
-.projects.list-view .project-card {
-  @apply flex items-center justify-between py-3 relative -mx-20 px-20 border-t border-primary
-  transition-colors duration-300;
+.projects.list-view a {
+  @apply block; /* que el enlace ocupe todo el ancho */
 }
 
-.projects.list-view .project-card:last-child {
+.projects.list-view a .project-card {
+  @apply flex items-center justify-between py-3 -mx-20 px-20 border-t border-primary transition-colors duration-300;
+}
+
+.projects.list-view a:last-child .project-card {
   @apply border-b border-primary;
 }
 
-.projects.list-view .project-image {
-  @apply w-48 h-28 rounded-lg shrink-0;
-}
-
+/* Info y flex-cont */
 .projects.list-view .project-info {
   @apply flex flex-row items-center;
   display: contents;
@@ -149,6 +150,7 @@ body.nav-open #page-content {
   display: contents;
 }
 
+/* Tipografía y layout de los elementos */
 .projects.list-view .project-card h3 {
   flex: 0 0 25%;
   @apply text-primary font-inconsolata font-500 text-h3 tracking-wide;
@@ -166,35 +168,26 @@ body.nav-open #page-content {
 
 .projects.list-view .project-card .project-image {
   flex: 0 0 180px;
-  @apply opacity-0
-  scale-150;
+  @apply rounded-lg opacity-0 scale-150;
 }
 
-.projects.list-view .project-card:hover {
+/* Hover: cambiar fondo, texto y bordes */
+.projects.list-view a .project-card:hover {
   @apply bg-accent;
-}
-
-.projects.list-view .project-card:hover + .project-card {
-  border-top-color: transparent;
-}
-
-.projects.list-view .project-card:hover {
   border-top-color: transparent;
   border-bottom-color: transparent;
 }
 
-.projects.list-view .project-card:hover h3,
-.projects.list-view .project-card:hover span,
-.projects.list-view .project-card:hover p {
+.projects.list-view a:hover + a .project-card {
+  border-top-color: transparent;
+}
+
+.projects.list-view a .project-card:hover h3,
+.projects.list-view a .project-card:hover span,
+.projects.list-view a .project-card:hover p {
   @apply text-muted;
 }
 
-.projects.list-view .project-card:hover h3,
-.projects.list-view .project-card:hover span,
-.projects.list-view .project-card:hover p {
-  @apply text-muted;
-}
-
-.projects.list-view .project-card:hover .project-image {
+.projects.list-view a .project-card:hover .project-image {
   @apply opacity-100;
 }

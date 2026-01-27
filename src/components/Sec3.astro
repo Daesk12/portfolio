@@ -25,23 +25,25 @@ import type { Project } from '../data/projects';
 
   <div id="projects" class="projects grid-view transition-all duration-300">
     {
-      projects.map((project: Project) => (
-        <article class="project-card group">
-          <div class="project-overlay project-info gap-2">
-            <h3>{project.title}</h3>
-            <div class="flex-cont">
-              <span>({project.year})</span>
-              <p>{project.category}</p>
+      projects.slice(0, 4).map((project: Project) => (
+        <a href={`/trabajos/${project.slug}`}>
+          <article class="project-card group">
+            <div class="project-overlay project-info gap-2">
+              <h3>{project.title}</h3>
+              <div class="flex-cont">
+                <span>({project.year})</span>
+                <p>{project.category}</p>
+              </div>
             </div>
-          </div>
-          <div class="project-image">
-            <img
-              src={project.image}
-              alt={project.title}
-              class="w-full rounded-lg h-full object-cover"
-            />
-          </div>
-        </article>
+            <div class="project-image">
+              <img
+                src={project.image}
+                alt={project.title}
+                class="w-full rounded-lg h-full object-cover"
+              />
+            </div>
+          </article>
+        </a>
       ))
     }
   </div>
