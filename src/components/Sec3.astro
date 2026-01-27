@@ -24,30 +24,22 @@ import type { Project } from '../data/projects';
   </div>
 
   <div id="projects" class="projects grid-view transition-all duration-300">
-    <!-- Projects will be dynamically loaded here -->
     {
       projects.map((project: Project) => (
-        <article class="project-card">
+        <article class="project-card group">
+          <div class="project-overlay project-info gap-2">
+            <h3>{project.title}</h3>
+            <div class="flex-cont">
+              <span>({project.year})</span>
+              <p>{project.category}</p>
+            </div>
+          </div>
           <div class="project-image">
             <img
               src={project.image}
               alt={project.title}
               class="w-full rounded-lg h-full object-cover"
             />
-          </div>
-
-          <div class="project-overlay project-info gap-2">
-            <h3>
-              {project.title}
-            </h3>
-            <div class="flex-cont">
-              <span>
-                ({project.year})
-              </span>
-              <p>
-                {project.category}
-              </p>
-            </div>
           </div>
         </article>
       ))
@@ -70,11 +62,9 @@ import type { Project } from '../data/projects';
   const actualizarVista = (vista: Vista) => {
     vistaActual = vista;
 
-    // Cambiar layout
     container.classList.toggle('grid-view', vista === 'grid');
     container.classList.toggle('list-view', vista === 'list');
 
-    // Estado visual de botones
     buttons.forEach((button) => {
       const activo = button.dataset.view === vista;
 
@@ -85,13 +75,11 @@ import type { Project } from '../data/projects';
     });
   };
 
-  // Eventos
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
       actualizarVista(button.dataset.view as Vista);
     });
   });
 
-  // Estado inicial
   actualizarVista(vistaActual);
 </script>

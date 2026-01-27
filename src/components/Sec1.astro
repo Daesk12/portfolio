@@ -41,22 +41,19 @@
   });
 
   const spans = leer.querySelectorAll('span');
-  const totalSpans = spans.length;
   gsap.set(spans, { opacity: (i) => (i === 0 ? 1 : 0.3) });
 
-  // Función para crear ScrollTrigger dinámicamente
   const createScrollTrigger = () => {
     const viewportHeight = window.innerHeight;
     const contentHeight = content.scrollHeight;
 
-    // Distancia mínima de scroll = mitad del contenido si no cabe en viewport
     const scrollDistance = Math.max(contentHeight - viewportHeight, contentHeight * 0.5);
 
     return gsap
       .timeline({
         scrollTrigger: {
           trigger: sec1,
-          start: 'top+=50px top', // <--- pin empieza 50px después de entrar a la sección
+          start: 'top+=50px top',
           end: `+=${scrollDistance}`,
           pin: true,
           pinSpacing: true,
@@ -78,7 +75,6 @@
 
   let anim = createScrollTrigger();
 
-  // Refrescar ScrollTrigger
   const refreshTrigger = () => {
     anim.kill();
     ScrollTrigger.refresh(true);

@@ -47,7 +47,7 @@ body:not(.nav-open) #nav-lateral:hover {
 }
 
 body.nav-open #nav-overlay {
-  pointer-events: all;
+  pointer-events: none;
 }
 
 body.nav-open #nav-lateral {
@@ -124,17 +124,77 @@ body.nav-open #main-content {
 }
 
 .projects.list-view {
-  @apply flex flex-col divide-y divide-muted;
+  @apply flex flex-col -mx-20 px-20;
 }
 
 .projects.list-view .project-card {
-  @apply flex items-center gap-8 py-6;
+  @apply flex items-center justify-between py-3 relative -mx-20 px-20 border-t border-primary
+  transition-colors duration-300;
+}
+
+.projects.list-view .project-card:last-child {
+  @apply border-b border-primary;
 }
 
 .projects.list-view .project-image {
-  @apply w-48 h-28 bg-muted rounded-lg shrink-0;
+  @apply w-48 h-28 rounded-lg shrink-0;
 }
 
 .projects.list-view .project-info {
-  @apply flex flex-row items-center gap-6;
+  @apply flex flex-row items-center;
+  display: contents;
+}
+
+.projects.list-view .project-info .flex-cont {
+  display: contents;
+}
+
+.projects.list-view .project-card h3 {
+  flex: 0 0 25%;
+  @apply text-primary font-inconsolata font-500 text-h3 tracking-wide;
+}
+
+.projects.list-view .project-card span {
+  flex: 0 0 5%;
+  @apply text-primary font-outfit text-caption tracking-wider font-600;
+}
+
+.projects.list-view .project-card p {
+  flex: 0 0 20%;
+  @apply text-primary font-outfit text-caption tracking-wide font-500 italic;
+}
+
+.projects.list-view .project-card .project-image {
+  flex: 0 0 180px;
+  @apply opacity-0
+  scale-150;
+}
+
+.projects.list-view .project-card:hover {
+  @apply bg-accent;
+}
+
+.projects.list-view .project-card:hover + .project-card {
+  border-top-color: transparent;
+}
+
+.projects.list-view .project-card:hover {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.projects.list-view .project-card:hover h3,
+.projects.list-view .project-card:hover span,
+.projects.list-view .project-card:hover p {
+  @apply text-muted;
+}
+
+.projects.list-view .project-card:hover h3,
+.projects.list-view .project-card:hover span,
+.projects.list-view .project-card:hover p {
+  @apply text-muted;
+}
+
+.projects.list-view .project-card:hover .project-image {
+  @apply opacity-100;
 }

@@ -54,15 +54,12 @@ import Nav from '../components/Nav.astro';
 
       nav?.addEventListener('click', (e) => {
         const target = e.target;
-        if (!target) return;
-        const el = target instanceof Element ? target : null;
-        if (el && (el.closest('a') || el.closest('button') || el.closest('h3') || el.closest('h4')))
-          return;
+        if (!(target instanceof Element)) return;
+
+        if (!target.closest('[data-nav-toggle]')) return;
 
         isOpen ? closeNav() : openNav();
       });
-
-      overlay?.addEventListener('click', closeNav);
 
       window.addEventListener('resize', () => {
         if (!nav) return;
