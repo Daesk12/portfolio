@@ -53,7 +53,7 @@ import type { Project } from '../data/projects';
                 {project.author || 'Autor(es) no definido'}
               </p>
               <p class="text-preview-p font-manrope font-500">
-                {project.preview || 'Descripción no definida'}
+                {project.preview?.es || 'Descripción no definida'}
               </p>
               <a href={`/trabajos/${project.slug}`}>
                 <button class="cursor-pointer min-w-20 bg-page p-2 w-1/3 text-primary rounded-lg hover:bg-accent hover:text-muted font-medium tracking-lg font-outfit">

@@ -123,13 +123,12 @@ body.nav-open #page-content {
   @apply text-muted font-outfit text-caption bg-secondary p-2 tracking-wide rounded-lg w-fit font-500 italic;
 }
 
-/* ===== LIST VIEW ===== */
 .projects.list-view {
   @apply flex flex-col;
 }
 
 .projects.list-view a {
-  @apply block; /* que el enlace ocupe todo el ancho */
+  @apply block;
 }
 
 .projects.list-view a .project-card {
@@ -140,7 +139,6 @@ body.nav-open #page-content {
   @apply border-b border-primary;
 }
 
-/* Info y flex-cont */
 .projects.list-view .project-info {
   @apply flex flex-row items-center;
   display: contents;
@@ -150,7 +148,6 @@ body.nav-open #page-content {
   display: contents;
 }
 
-/* Tipografía y layout de los elementos */
 .projects.list-view .project-card h3 {
   flex: 0 0 25%;
   @apply text-primary font-inconsolata font-500 text-h3 tracking-wide;
@@ -171,7 +168,6 @@ body.nav-open #page-content {
   @apply rounded-lg opacity-0 scale-150;
 }
 
-/* Hover: cambiar fondo, texto y bordes */
 .projects.list-view a .project-card:hover {
   @apply bg-accent;
   border-top-color: transparent;
@@ -190,4 +186,30 @@ body.nav-open #page-content {
 
 .projects.list-view a .project-card:hover .project-image {
   @apply opacity-100;
+}
+
+.projects.grid-view .project-featured {
+  grid-column: span 2;
+}
+
+.projects.grid-view .project-featured .project-image {
+  aspect-ratio: 18 / 9;
+}
+
+.projects.grid-view .project-featured img {
+  object-position: center center;
+}
+
+/* ===== FEATURED PROJECT (GRID VIEW) ===== */
+
+.projects.grid-view .project-featured h3 {
+  @apply text-h4;
+}
+
+.projects.grid-view .project-featured span {
+  @apply text-base;
+}
+
+.projects.grid-view .project-featured p {
+  @apply text-base;
 }

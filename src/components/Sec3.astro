@@ -3,7 +3,7 @@ import { projects } from '../data/projects';
 import type { Project } from '../data/projects';
 ---
 
-<section id="sec2" class="w-full h-auto p-20 flex flex-col gap-10">
+<section id="sec3" class="w-full h-auto p-20 flex flex-col gap-10">
   <div class="flex justify-between items-center">
     <h2
       class="uppercase text-primary font-manrope font-700 text-caption tracking-wider underline underline-offset-8">
@@ -32,7 +32,7 @@ import type { Project } from '../data/projects';
               <h3>{project.title}</h3>
               <div class="flex-cont">
                 <span>({project.year})</span>
-                <p>{project.category}</p>
+                <p>{project.category.es}</p>
               </div>
             </div>
             <div class="project-image">

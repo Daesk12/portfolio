@@ -55,6 +55,7 @@ export default {
 
       fontSize: {
         headertitle: ['clamp(8rem, 15vw, 16rem)', { lineHeight: '1' }],
+        herotitle: ['clamp(3rem, 8vw, 8rem)', { lineHeight: '1' }],
         h1: ['clamp(2.5rem, 6vw, 4rem)', { lineHeight: '1.1' }],
         h2: ['clamp(2rem, 5vw, 3rem)', { lineHeight: '1.15' }],
         h3: ['clamp(1.5rem, 3.5vw, 2rem)', { lineHeight: '1.25' }],
