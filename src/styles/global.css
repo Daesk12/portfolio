@@ -213,3 +213,11 @@ body.nav-open #page-content {
 .projects.grid-view .project-featured p {
   @apply text-base;
 }
+
+#ddescription h2 {
+  @apply text-caption text-primary font-600 font-manrope tracking-wider;
+}
+
+#ddescription p {
+  @apply text-primary/90 font-manrope font-400 text-body leading-base;
+}

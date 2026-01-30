@@ -38,7 +38,10 @@ import type { Project } from '../data/projects';
     </ul>
 
     <div class="flex justify-start gap-2 flex-col">
-      <h3 class="text-h3 font-700 font-outfit tracking-wider text-muted underline">PREVIEW</h3>
+      <h3
+        class="text-h3 font-700 font-outfit tracking-wider text-muted underline underline-offset-4">
+        PREVIEW
+      </h3>
       <div class="flex flex-col gap-5 max-h-[42vh] overflow-y-auto pr-3 preview-scroll">
         {
           projects.slice(0, 4).map((project) => (
@@ -50,7 +53,7 @@ import type { Project } from '../data/projects';
                 {project.year}
               </p>
               <p class="text-author font-manrope tracking-wider font-100 leading-base text-muted">
-                {project.author || 'Autor(es) no definido'}
+                {project.author.replace(/\n/g, ' - ')}
               </p>
               <p class="text-preview-p font-manrope font-500">
                 {project.preview?.es || 'Descripción no definida'}
