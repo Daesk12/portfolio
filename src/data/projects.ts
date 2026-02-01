@@ -62,11 +62,11 @@ export const projects: Project[] = [
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#D94F3D' },
+      { id: 'p2', hex: '#F2A65A' },
+      { id: 'p3', hex: '#3A7CA5' },
+      { id: 'p4', hex: '#2E2E2E' },
+      { id: 'p5', hex: '#E6E1D6' },
     ],
     media: [
       { id: 'm2', src: '/images/nos-otros/02.webp', role: 'medium' },
@@ -76,7 +76,7 @@ export const projects: Project[] = [
       { id: 'm6', src: '/images/nos-otros/06.webp', role: 'detail' },
     ],
     preview: {
-      es: `A través de una experiencia interactiva, el proyecto propone una reflexión sobre cómo distintos contextos de la ciudad de Medellín influyen en la construcción de la identidad durante la adultez emergente, integrando cuerpo, sonido e interacción visual.`,
+      es: `A través de una experiencia interactiva, el proyecto propone una reflexión sobre cómo distintos contextos de la ciudad de Medellín influyen en la construcción de la identidad durante la adultez emergente.`,
       en: ``,
     },
     sdescription: {
@@ -86,19 +86,19 @@ export const projects: Project[] = [
     ddescription: {
       es: `
 ## Idea:
-Este proyecto nació de la necesidad de crear una experiencia que combinara diseño de modas, realización y producción musical y diseño gráfico en uno solo, siendo aquí la primera pregunta ¿cómo lo volvemos un todo?, con esto en mente se empezaron a plantear distintas propuestas donde se le asignó un rol a cada una de las disciplinas, siendo música contextualización, modas expresión y gráfico interacción. <br> <br>
+Este proyecto nació de la necesidad de crear una experiencia que combinara diseño de modas, realización y producción musical y diseño gráfico en uno solo, siendo aquí la primera pregunta ¿cómo lo volvemos un todo?, con esto en mente se empezaron a plantear distintas propuestas donde se le asignó un rol a cada una de las disciplinas, siendo música contextualización, modas expresión y gráfico interacción.
 
 ## Concepto:
-Antes de hablar de interacción u otras cosas es importante saber el concepto con el que se estaba tratando en este proyecto, la base con la que se trabajó este fueron las transformaciones identitarias por factores externos y sus derivaciones en la ciudad de Medellín en la adultez emergente, este concepto de por sí es gigante por lo que se decidió aterrizar a las transformaciones identitarias en 4 contextos de la ciudad (discotecas, familia, amigos y universidad). <br> <br>
+Antes de hablar de interacción u otras cosas es importante saber el concepto con el que se estaba tratando en este proyecto, la base con la que se trabajó este fueron las transformaciones identitarias por factores externos y sus derivaciones en la ciudad de Medellín en la adultez emergente, este concepto de por sí es gigante por lo que se decidió aterrizar a las transformaciones identitarias en 4 contextos de la ciudad (discotecas, familia, amigos y universidad).
 
 ## Interacción: 
-Con los roles correctamente distribuidos y el concepto aterrizado la pregunta que se pensó como equipo de creación fue, ¿qué tipo de interacción queremos?, al tratarse de un concepto abstracto como las transformaciones identitarias lo que se planteó fue la libertad de expresarlo con tus propias manos como un medio de respuesta individual al concepto, con esto claro se repartieron roles de interacción siendo una tableta el medio de expresión que conectaba con un pc que era donde se veía lo expresado y este a su vez estaba conectado con otro computador y un proyector, todo esto proyectándose en un cuerpo no cuerpo realizado por Mariana Restrepo. <br> <br>
+Con los roles correctamente distribuidos y el concepto aterrizado la pregunta que se pensó como equipo de creación fue, ¿qué tipo de interacción queremos?, al tratarse de un concepto abstracto como las transformaciones identitarias lo que se planteó fue la libertad de expresarlo con tus propias manos como un medio de respuesta individual al concepto, con esto claro se repartieron roles de interacción siendo una tableta el medio de expresión que conectaba con un pc que era donde se veía lo expresado y este a su vez estaba conectado con otro computador y un proyector, todo esto proyectándose en un cuerpo no cuerpo realizado por Mariana Restrepo.
 
 ## Funcionalidad:
-Ahora ¿Cómo funciona todo esto?, básicamente aquí entra programación pura y dura, por medio de una red LAN (Local Area Network) se conectan 3 cosas puntualmente: tableta - computador 1 - computador 2, siendo que la tableta es el emisor de información y los dos computadores son los receptores, lo que hace la tableta es mandar parámetros de posición a los dos receptores, enviar intensidad MIDI por esquina y adicionalmente dictaminar la visual que se muestra en el computador 1 el cual es el núcleo central de todo, ya que este funciona como receptor, server, emisor de red y procesador de parámetros MIDI conectados a Fl studio permitiendo que las posiciones de la tableta conecten con la música de lo cual ya se encargó Anthony Ortega el realizador y productor músical, por último el computador 2 funciona meramente como receptor, este está conectado a touchdesigner y lo que hace es recibir parámetros OSC de la misma manera que los MIDI conectado a una cámara la cual está sincronizada al movimiento realizado en la tableta. <br> <br>
+Ahora ¿Cómo funciona todo esto?, básicamente aquí entra programación pura y dura, por medio de una red LAN (Local Area Network) se conectan 3 cosas puntualmente: tableta - computador 1 - computador 2, siendo que la tableta es el emisor de información y los dos computadores son los receptores, lo que hace la tableta es mandar parámetros de posición a los dos receptores, enviar intensidad MIDI por esquina y adicionalmente dictaminar la visual que se muestra en el computador 1 el cual es el núcleo central de todo, ya que este funciona como receptor, server, emisor de red y procesador de parámetros MIDI conectados a Fl studio permitiendo que las posiciones de la tableta conecten con la música de lo cual ya se encargó Anthony Ortega el realizador y productor músical, por último el computador 2 funciona meramente como receptor, este está conectado a touchdesigner y lo que hace es recibir parámetros OSC de la misma manera que los MIDI conectado a una cámara la cual está sincronizada al movimiento realizado en la tableta.
 
 ## Visuales:
-Las visuales de cada uno de los contextos los cuales son discoteca, familia, amigos y universidad salieron de la simplificación de formas y a partir de información que las personas de esta edad entienden en cada uno de estos lugares siendo que en discoteca son movimiento y ruido, lo que se tradujo a líneas y ecos, en familia son cercanía y unión, que se tradujo a una red de círculos, en amigos es conexión y calidez, que se tradujo a círculos dispersos y por último universidad se asocia a conocimiento y estructura, que se tradujo a una red de cuadrados, a cada una de estas adicional se le agregó una interacción que cada individuo experimenta de manera propia, siendo en discoteca la creación de su propio movimiento/ruido, en familia el agrupamiento de la red de círculos, en amigos la construcción de lazos y en universidad la selección/focalización del conocimiento. <br> <br>
+Las visuales de cada uno de los contextos los cuales son discoteca, familia, amigos y universidad salieron de la simplificación de formas y a partir de información que las personas de esta edad entienden en cada uno de estos lugares siendo que en discoteca son movimiento y ruido, lo que se tradujo a líneas y ecos, en familia son cercanía y unión, que se tradujo a una red de círculos, en amigos es conexión y calidez, que se tradujo a círculos dispersos y por último universidad se asocia a conocimiento y estructura, que se tradujo a una red de cuadrados, a cada una de estas adicional se le agregó una interacción que cada individuo experimenta de manera propia, siendo en discoteca la creación de su propio movimiento/ruido, en familia el agrupamiento de la red de círculos, en amigos la construcción de lazos y en universidad la selección/focalización del conocimiento.
 
 ## ¿Cómo se realizó?
 Por último para realizar todo el tema de la unión entre los distintos medios se hizo vibe coding para ello ya que como tal había partes que como diseñador gráfico no llegaban a mis alcances disciplinares. Con esto entendido, para la conexión de distintos medios se hizo uso de Socket.io, y para la recepción de parámetros MIDI se usó una herramienta llamada loopMIDI que permite crear canales de este tipo de parámetros, con todo esto finalmente se unificó todo haciendo uso de js en su gran mayoría y algo de css para la creación de la interfaz de la tableta, pero en su gran parte es js puro.
@@ -123,15 +123,15 @@ Por último para realizar todo el tema de la unión entre los distintos medios s
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#e5d4c1' },
+      { id: 'p2', hex: '#ebd198' },
+      { id: 'p3', hex: '#8f5f4a' },
+      { id: 'p4', hex: '#734f43' },
+      { id: 'p5', hex: '#55535c' },
     ],
     media: [
-      { id: 'm2', src: '/images/el-guionista/02.webp', role: 'medium' },
-      { id: 'm3', src: '/images/el-guionista/03.webp', role: 'medium' },
+      { id: 'm2', src: '/images/el-guionista/02.gif', role: 'medium' },
+      { id: 'm3', src: '/images/el-guionista/03.gif', role: 'medium' },
       { id: 'm4', src: '/images/el-guionista/04.webp', role: 'detail' },
       { id: 'm5', src: '/images/el-guionista/05.webp', role: 'detail' },
       { id: 'm6', src: '/images/el-guionista/06.webp', role: 'detail' },
@@ -147,11 +147,11 @@ Por último para realizar todo el tema de la unión entre los distintos medios s
     ddescription: {
       es: `
 ## Resumen:
-En un pueblo lleno de tradiciones, regido por la religión y conservador a más no poder nace un niño completamente diferente de todo lo que habían visto con pelo blanco y ojos rojos a la gente de este lugar no le queda más que decir que es un demonio. Siendo maltratado por años por parte de sus padres, este es llevado a la iglesia donde su vida no mejora, con el tiempo su único deseo es escapar de este lugar que tanta tristeza y dolor le ha causado, no tiene alguien a quien llamar familia y todo lo que este escucha es a él mismo deseando destruir ese lugar que tantas penurias le causó, finalmente abandona el lugar solo deseando su fin. <br> <br>
+En un pueblo lleno de tradiciones, regido por la religión y conservador a más no poder nace un niño completamente diferente de todo lo que habían visto con pelo blanco y ojos rojos a la gente de este lugar no le queda más que decir que es un demonio. Siendo maltratado por años por parte de sus padres, este es llevado a la iglesia donde su vida no mejora, con el tiempo su único deseo es escapar de este lugar que tanta tristeza y dolor le ha causado, no tiene alguien a quien llamar familia y todo lo que este escucha es a él mismo deseando destruir ese lugar que tantas penurias le causó, finalmente abandona el lugar solo deseando su fin.
 
-Al llegar a la ciudad este no tiene educación por lo que se dedica a robar para poder sobrevivir, un dia se encuentra con la jefa de una familia de informantes que desea criarlo por su peculiar cabello y sus bellos ojos que muestran un deseo, sin saber que esa fue la peor decisión posible y la que le costaría la vida. <br> <br>
+Al llegar a la ciudad este no tiene educación por lo que se dedica a robar para poder sobrevivir, un dia se encuentra con la jefa de una familia de informantes que desea criarlo por su peculiar cabello y sus bellos ojos que muestran un deseo, sin saber que esa fue la peor decisión posible y la que le costaría la vida.
 
-En su adultez y como jefe del clan de informantes nuestro protagonista solo tiene un deseo, destruir el pueblo que tanto dolor le creo y que lo volvio el monstruo que hoy en dia es, para poder así estar en paz, pero él no es fuerte, solo sabe hablar y engañar, por lo que con sus dos armas lleva tanto a los héroes como a los villanos allí para que tengan “ la gran pelea final” la cual no es más que una matanza sin propósito llevándose a todo el pueblo de por medio. <br> <br>
+En su adultez y como jefe del clan de informantes nuestro protagonista solo tiene un deseo, destruir el pueblo que tanto dolor le creo y que lo volvio el monstruo que hoy en dia es, para poder así estar en paz, pero él no es fuerte, solo sabe hablar y engañar, por lo que con sus dos armas lleva tanto a los héroes como a los villanos allí para que tengan “ la gran pelea final” la cual no es más que una matanza sin propósito llevándose a todo el pueblo de por medio.
 
 ## Contexto del proyecto:
 Aquí mi idea era crear un personaje insensible, quería crear la historia de un vendedor de información ya que siempre me ha parecido un rol muy interesante pero que normalmente solo se usa para impulsar la historia de los protagonistas y siempre me pareció desaprovechado así que por ello cree este personaje y sus distintos acompañantes.
@@ -175,15 +175,15 @@ Aquí mi idea era crear un personaje insensible, quería crear la historia de un
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#dddfd5' },
+      { id: 'p2', hex: '#b95232' },
+      { id: 'p3', hex: '#9e382b' },
+      { id: 'p4', hex: '#481610' },
+      { id: 'p5', hex: '#050009' },
     ],
     media: [
-      { id: 'm2', src: '/images/xoldarg/02.webp', role: 'medium' },
-      { id: 'm3', src: '/images/xoldarg/03.webp', role: 'medium' },
+      { id: 'm2', src: '/images/xoldarg/02.gif', role: 'medium' },
+      { id: 'm3', src: '/images/xoldarg/03.gif', role: 'medium' },
       { id: 'm4', src: '/images/xoldarg/04.webp', role: 'detail' },
       { id: 'm5', src: '/images/xoldarg/05.webp', role: 'detail' },
       { id: 'm6', src: '/images/xoldarg/06.webp', role: 'detail' },
@@ -199,14 +199,14 @@ Aquí mi idea era crear un personaje insensible, quería crear la historia de un
     ddescription: {
       es: `
 ## Sinopsis:
-Xoldarg es alguien realmente raro ya que pese a su apariencia terrorífica es alguien realmente amable que busca siempre cuidar a los demás, cuando era niño la gente a su alrededor corría de él y lo llamaban monstruo, pero aun así esto no evitó que nuestro protagonista siguiera haciendo lo que más lo hacía feliz, ayudar a los demás. <br> <br>
+Xoldarg es alguien realmente raro ya que pese a su apariencia terrorífica es alguien realmente amable que busca siempre cuidar a los demás, cuando era niño la gente a su alrededor corría de él y lo llamaban monstruo, pero aun así esto no evitó que nuestro protagonista siguiera haciendo lo que más lo hacía feliz, ayudar a los demás.
 
-Un día nuestro protagonista fue a la playa. Al llegar vio a alguien ahogándose por lo que se lanzó directo a ayudarlo, lo que él no sabía era que el mar estaba lleno de tiburones una de las cosas a las que más le teme pero había algo aún peor que eso. Las estrellas de mar, su mayor temor. <br> <br>
+Un día nuestro protagonista fue a la playa. Al llegar vio a alguien ahogándose por lo que se lanzó directo a ayudarlo, lo que él no sabía era que el mar estaba lleno de tiburones una de las cosas a las que más le teme pero había algo aún peor que eso. Las estrellas de mar, su mayor temor.
 
-Un día mientras que Xoldarg andaba en el parque veía a los niños jugar y ser felices por lo que él también quería apoyarlos. Decidido comprar una pistola de burbujas y una varita mágica que hasta el día de hoy conserva ya que con estos al menos no es completamente rechazado por las personas. <br> <br>
+Un día mientras que Xoldarg andaba en el parque veía a los niños jugar y ser felices por lo que él también quería apoyarlos. Decidido comprar una pistola de burbujas y una varita mágica que hasta el día de hoy conserva ya que con estos al menos no es completamente rechazado por las personas.
 
 ## Personajes:
-Xoldarg: Es nuestro protagonista, caballeroso como pocos, pese a verse intimidante es alguien realmente dulce que se preocupa por los demás en exceso y que haría lo que sea con tal de ver la sonrisa de las personas a su alrededor. <br> <br>
+Xoldarg: Es nuestro protagonista, caballeroso como pocos, pese a verse intimidante es alguien realmente dulce que se preocupa por los demás en exceso y que haría lo que sea con tal de ver la sonrisa de las personas a su alrededor.
 
 Antonio: El unico y mejor amigo de Xoldarg ese que está en las buenas y en las malas para él y que es como un hermano para nuestro protagonista pese a su peculiar forma.
 `,
@@ -229,11 +229,11 @@ Antonio: El unico y mejor amigo de Xoldarg ese que está en las buenas y en las 
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#d3d3d3' },
+      { id: 'p2', hex: '#8a8a8a' },
+      { id: 'p3', hex: '#4c4c4c' },
+      { id: 'p4', hex: '#d70010' },
+      { id: 'p5', hex: '#a2000c' },
     ],
     media: [
       { id: 'm2', src: '/images/reflejos-del-alma/02.webp', role: 'medium' },
@@ -274,11 +274,11 @@ La intención con este proyecto fue plasmar esa sensación del ser cuando tenemo
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#1B1B1B' },
+      { id: 'p2', hex: '#D4D1C8' },
+      { id: 'p3', hex: '#A81E1B' },
+      { id: 'p4', hex: '#8C1710' },
+      { id: 'p5', hex: '#4C0806' },
     ],
     media: [
       { id: 'm2', src: '/images/branding-nos-otros/02.webp', role: 'medium' },
@@ -294,7 +294,7 @@ La intención con este proyecto fue plasmar esa sensación del ser cuando tenemo
     ddescription: {
       es: `
 ## Naming y descripción:
-El naming del proyecto surge de como yo (nos) cambió para encajar en un otros que nunca se termina de consolidar, de todos esos cambios que tengo que hacer en mi para poder encajar con el resto y que finalmente me hace perder lo más importante de mi, mi identidad, por ello el tachado en el nos y el otros que es cambiante, con letras que nunca encajan perfectamente y que siempre están en constante cambio. <br> <br>
+El naming del proyecto surge de como yo (nos) cambió para encajar en un otros que nunca se termina de consolidar, de todos esos cambios que tengo que hacer en mi para poder encajar con el resto y que finalmente me hace perder lo más importante de mi, mi identidad, por ello el tachado en el nos y el otros que es cambiante, con letras que nunca encajan perfectamente y que siempre están en constante cambio.
 
 A nivel tipográfico se realizaron distintas exploraciones desde este mismo concepto, explorando también la mirada, la unión, el cambio y la inexistencia, siendo que finalmente la pérdida del yo y el otros cambiante fue el que más logró encajar con la filosofía del proyecto, ya que no es solo algo estéticamente agradable, sino que expresa el enfoque autoral que se tenía con el proyecto.
 `,
@@ -303,10 +303,10 @@ A nivel tipográfico se realizaron distintas exploraciones desde este mismo conc
   },
   {
     id: 6,
-    title: 'Iconos nos(otros)',
+    title: 'Cartografía nos(otros)',
     author: 'Daniel Escobar',
-    job: 'Diseñador de iconos',
-    slug: 'iconos-nos-otros',
+    job: 'Diseñador de iconos y diseñador de instrucciones',
+    slug: 'cartografia-nos-otros',
     year: 2025,
     category: { es: 'Iconografía', en: '' },
     image: '/images/iconosnosotros.jpg',
@@ -317,11 +317,11 @@ A nivel tipográfico se realizaron distintas exploraciones desde este mismo conc
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#1B1B1B' },
+      { id: 'p2', hex: '#D4D1C8' },
+      { id: 'p3', hex: '#A81E1B' },
+      { id: 'p4', hex: '#8C1710' },
+      { id: 'p5', hex: '#4C0806' },
     ],
     media: [
       { id: 'm2', src: '/images/iconos-nos-otros/02.webp', role: 'medium' },
@@ -337,7 +337,7 @@ A nivel tipográfico se realizaron distintas exploraciones desde este mismo conc
     ddescription: {
       es: `
 ## Contextualización:
-Las transformaciones identitarias se viven de muchísimas maneras, siempre estamos en constante cambio y evolución y algo muy importante de estas es que son algo meramente individual pero colectivo en sincronía ya que mi identidad cambia tanto al interactuar con el otro como conmigo mismo, por lo que el ejercicio realizado con los iconos, fue crear estas piezas iconográficas que representaran el cómo el individuo se transforma en relación al otro y el cómo este intercambio lo afecta en mayor o menor medida, por ello cada icono por más parecidos que son tiene un significante individual y colectivo, el punto con esto es que cuando se planteó la experiencia/interacción la idea es que la persona colocara cada uno de estos en un espejo fragmentado donde la persona considerara que el concepto encajaba con si, creando no solo una obra cambiante, donde dependiendo de la persona la lectura fuera completamente diferente, sino una obra colectiva, donde el icono no se vuelve solo la representación de algo, sino una forma de hablar de las personas.
+Las transformaciones identitarias se viven de muchísimas maneras, siempre estamos en constante cambio y evolución y algo muy importante de estas es que son algo meramente individual pero colectivo en sincronía ya que mi identidad cambia tanto al interactuar con el otro como conmigo mismo, por lo que el ejercicio realizado con la cartografía, fue crear distintas piezas que representaran el cómo el individuo se transforma en relación al otro y el cómo este intercambio lo afecta en mayor o menor medida, por ello cada pieza sigue una narrativa que, por más parecidas que sean, cada una tiene un significante individual y colectivo, el punto con esto es que cuando se planteó la experiencia/interacción la idea es que la persona colocara cada uno de estas en un espejo fragmentado donde la persona considerara que el concepto encajaba con si, creando no solo una obra cambiante, donde dependiendo de la persona la lectura fuera completamente diferente, sino una obra colectiva, donde las piezas no se vuelven solo la representación de algo, sino una forma de hablar de las personas.
 `,
       en: ``,
     },
@@ -358,11 +358,11 @@ Las transformaciones identitarias se viven de muchísimas maneras, siempre estam
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#1B1B1B' },
+      { id: 'p2', hex: '#D4D1C8' },
+      { id: 'p3', hex: '#A81E1B' },
+      { id: 'p4', hex: '#8C1710' },
+      { id: 'p5', hex: '#4C0806' },
     ],
     media: [
       { id: 'm2', src: '/images/fanzine-nosotros/02.webp', role: 'medium' },
@@ -399,11 +399,11 @@ Las transformaciones identitarias son un concepto muy amplio y entender obras re
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#304d5d' },
+      { id: 'p2', hex: '#7097ce' },
+      { id: 'p3', hex: '#996f54' },
+      { id: 'p4', hex: '#cd7b33' },
+      { id: 'p5', hex: '#e4b6b6' },
     ],
     media: [
       { id: 'm2', src: '/images/proyectos-ilustracion/02.webp', role: 'medium' },
@@ -433,11 +433,11 @@ Las transformaciones identitarias son un concepto muy amplio y entender obras re
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '' },
-      { id: 'p2', hex: '' },
-      { id: 'p3', hex: '' },
-      { id: 'p4', hex: '' },
-      { id: 'p5', hex: '' },
+      { id: 'p1', hex: '#ae1219' },
+      { id: 'p2', hex: '#4477a4' },
+      { id: 'p3', hex: '#678318' },
+      { id: 'p4', hex: '#ddb51d' },
+      { id: 'p5', hex: '#d27a96' },
     ],
     media: [
       { id: 'm2', src: '/images/proyectos-fotografia/02.webp', role: 'medium' },

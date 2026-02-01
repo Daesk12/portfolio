@@ -1,6 +1,7 @@
 @config "../../tailwind.config.mjs";
 
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 html,
 body {
@@ -27,8 +28,9 @@ body {
 }
 
 #nav-lateral {
-  transform: translateX(calc(-25vw + 10px));
+  transform: translateX(calc(-100% + 10px));
   transition: transform 300ms ease;
+  background-color: #d6d7ff;
 }
 
 body:not(.nav-open) #nav-lateral:hover {
@@ -38,7 +40,7 @@ body:not(.nav-open) #nav-lateral:hover {
 #nav-overlay {
   position: fixed;
   top: 0;
-  left: 25vw;
+  left: var(--nav-width, 25%);
   right: 0;
   bottom: 0;
   background: transparent;
@@ -55,11 +57,10 @@ body.nav-open #nav-lateral {
 }
 
 body.nav-open #page-content {
-  margin-left: 25vw;
-  width: calc(100vw - 25vw);
+  margin-left: 25%;
+  width: calc(100% - 25%);
 }
 
-/* ===== MAIN CONTENT ===== */
 #page-content {
   width: calc(100vw - var(--nav-offset, 10px));
   margin-left: var(--nav-offset, 10px);
@@ -220,4 +221,49 @@ body.nav-open #page-content {
 
 #ddescription p {
   @apply text-primary/90 font-manrope font-400 text-body leading-base;
+}
+
+#media-container {
+  --image-tint: transparent;
+}
+
+.media-image {
+  position: relative;
+}
+
+.media-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.media-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--image-tint);
+  opacity: 0; /* 👈 CLAVE */
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+
+#media-container[data-active="true"] .media-wrapper::after {
+  opacity: 0.7;
+}
+
+.media-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.media-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.palette-active {
+  @apply border-2 border-accent scale-y-150;
 }

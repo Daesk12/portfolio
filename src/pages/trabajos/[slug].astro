@@ -17,6 +17,12 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props as { project: Project };
+const hero = project.hero;
+const media = project.media ?? [];
+
+const mediums = media.filter((m) => m.role === 'medium');
+const details = media.filter((m) => m.role === 'detail');
+
 const lang: 'es' | 'en' = 'es';
 
 const html = project.ddescription ? marked.parse(dedent(project.ddescription[lang])) : '';
@@ -45,16 +51,30 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
       </div>
     </div>
     <div class="flex justify-between">
-      <div class="w-4/9 flex flex-col gap-1">
-        <h2 class="text-caption text-primary font-600 font-manrope tracking-wider">
-          Descripción general del proyecto:
-        </h2>
-        <p class="text-body text-primary/90 font-400 font-manrope leading-base">
-          {project.sdescription?.es}
-        </p>
+      <div class="w-4/9 flex flex-col gap-5">
+        <div class="flex flex-col gap-1">
+          <h2 class="text-caption text-primary font-600 font-manrope tracking-wider">
+            Descripción general del proyecto:
+          </h2>
+          <p class="text-body text-primary/90 font-400 font-manrope leading-base">
+            {project.sdescription?.es}
+          </p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-caption text-primary font-600 font-manrope tracking-wider">
+            Rol(es) desempeñados:
+          </h2>
+          <p class="text-body text-primary/90 font-400 font-manrope leading-base">
+            {project.job}
+          </p>
+        </div>
       </div>
       <div class="w-4/9 flex flex-col">
-        <div id="ddescription" class="line-clamp-7 transition-all" set:html={html} />
+        <div
+          id="ddescription"
+          class="line-clamp-7 transition-all prose prose-primary prose-h2:mb-0"
+          set:html={html}
+        />
         <h2
           id="toggle-desc"
           role="button"
@@ -64,6 +84,88 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
         </h2>
       </div>
     </div>
+    {
+      project.palette && project.palette.length > 0 && (
+        <div id="palette" class="grid grid-cols items-center gap-6">
+          <div class="grid grid-cols-5 gap-2">
+            {project.palette.map((color) => (
+              <button
+                class="h-12 w-full rounded-lg transition hover:scale-y-150 hover:border-accent/50 border border-primary"
+                style={`background-color: ${color.hex}`}
+                data-color={color.hex}
+                aria-label={`Aplicar color ${color.hex}`}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <div id="media-container" class="flex flex-col gap-5" style="--image-tint: transparent;">
+      <div class="media-wrapper">
+        {
+          hero && (
+            <>
+              {hero.type === 'image' && (
+                <img
+                  src={hero.src}
+                  alt={project.title}
+                  class="media-image w-full aspect-video object-cover rounded-lg"
+                />
+              )}
+
+              {hero.type === 'video' && (
+                <video
+                  src={hero.src}
+                  poster={hero.poster}
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  class="media-image w-full aspect-video object-cover rounded-lg"
+                />
+              )}
+            </>
+          )
+        }
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {
+          mediums.map((img) => (
+            <div class="media-wrapper">
+              <img
+                src={img.src}
+                alt=""
+                loading="lazy"
+                class="media-image w-full aspect-16/10 object-cover rounded-lg"
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+        {
+          details.map((img) => (
+            <div class="media-wrapper">
+              <img
+                src={img.src}
+                alt=""
+                loading="lazy"
+                class="media-image w-full aspect-square object-cover rounded-lg"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <div>
+      <a
+        href="/trabajos/home"
+        class="text caption text-caption uppercase tracking-wider font-manrope font-700 text-primary hover:text-accent cursor-pointer transition"
+        >VOLVER A TRABAJOS</a
+      >
+    </div>
   </section>
 </Layout>
 
@@ -71,26 +173,83 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
   window.addEventListener('DOMContentLoaded', () => {
     const desc = document.getElementById('ddescription');
     const trigger = document.getElementById('toggle-desc');
+    const paletteButtons = document.querySelectorAll<HTMLButtonElement>('[data-color]');
+    const mediaContainer = document.getElementById('media-container') as HTMLElement | null;
 
-    if (!desc || !trigger) return;
+    if (!mediaContainer) return;
 
-    const hasOverflow = desc.scrollHeight > desc.clientHeight;
-    if (hasOverflow) {
-      trigger.classList.remove('hidden');
+    /* ---------- Leer más / menos ---------- */
+    if (desc && trigger) {
+      const hasOverflow = desc.scrollHeight > desc.clientHeight;
+      if (hasOverflow) trigger.classList.remove('hidden');
+
+      const toggle = () => {
+        const isClamped = desc.classList.contains('line-clamp-7');
+        desc.classList.toggle('line-clamp-7');
+        trigger.textContent = isClamped ? 'Leer menos' : 'Leer más';
+      };
+
+      trigger.addEventListener('click', toggle);
+      trigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
     }
 
-    const toggle = () => {
-      const isClamped = desc.classList.contains('line-clamp-7');
-      desc.classList.toggle('line-clamp-7');
-      trigger.textContent = isClamped ? 'Leer menos' : 'Leer más';
-    };
+    /* ---------- Paleta interactiva ---------- */
+    let activeButton: HTMLButtonElement | null = null;
 
-    trigger.addEventListener('click', toggle);
-    trigger.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggle();
-      }
+    paletteButtons.forEach((btn) => {
+      const color = btn.dataset.color;
+      if (!color) return;
+
+      // Hover (preview)
+      btn.addEventListener('mouseenter', () => {
+        if (btn !== activeButton) {
+          if (activeButton) return;
+
+          mediaContainer.style.setProperty('--image-tint', color);
+          mediaContainer.dataset.active = 'true';
+        }
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        if (!activeButton) {
+          if (activeButton) return;
+
+          mediaContainer.style.setProperty('--image-tint', 'transparent');
+          delete mediaContainer.dataset.active;
+        }
+      });
+
+      // Click (toggle)
+      btn.addEventListener('click', () => {
+        const isActive = btn === activeButton;
+
+        // Si vuelvo a hacer click en el mismo → desactivar
+        if (isActive) {
+          btn.classList.remove('palette-active');
+          mediaContainer.style.setProperty('--image-tint', 'transparent');
+          delete mediaContainer.dataset.active;
+          delete mediaContainer.dataset.locked;
+          activeButton = null;
+          return;
+        }
+
+        // Si había otro activo → resetearlo
+        if (activeButton) {
+          activeButton.classList.remove('palette-active');
+        }
+
+        // Activar nuevo
+        btn.classList.add('palette-active');
+        mediaContainer.style.setProperty('--image-tint', color);
+        mediaContainer.dataset.locked = 'true';
+        mediaContainer.dataset.active = 'true';
+        activeButton = btn;
+      });
     });
   });
 </script>
