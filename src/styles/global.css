@@ -267,3 +267,37 @@ body.nav-open #page-content {
 .palette-active {
   @apply border-2 border-accent scale-y-150;
 }
+
+.cover-fade {
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
+.cover-hidden {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+#contact-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+#contact-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.contact-terminal {
+  transform: scale(0.96);
+  opacity: 0;
+  filter: blur(6px);
+  transition: all 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#contact-overlay.active .contact-terminal {
+  transform: scale(1);
+  opacity: 1;
+  filter: blur(0);
+}
