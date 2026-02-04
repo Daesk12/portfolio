@@ -75,3 +75,15 @@ import type { Project } from '../data/projects';
     </div>
   </div>
 </nav>
+
+<script>
+  document.addEventListener('click', (e) => {
+  const target = e.target;
+  if (!(target instanceof Element)) return;
+
+  if (target.closest('[data-contact-open]')) {
+    window.dispatchEvent(new CustomEvent('open-contact'));
+  }
+});
+
+</script>

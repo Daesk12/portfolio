@@ -1,9 +1,559 @@
-<section id="contact-overlay" class="fixed inset-0 z-100 hidden">
-  <!-- BACKDROP -->
-  <div class="absolute inset-0 bg-black/40 backdrop-blur-md" data-contact-close></div>
+---
+import { terminalSteps } from '../data/terminal';
+---
 
-  <!-- TERMINAL -->
-  <div class="relative mx-auto mt-32 w-full max-w-xl contact-terminal">
-    <!-- terminal content -->
+<section id="contact-overlay" class="fixed inset-0 items-center justify-center z-100 hidden">
+  <!-- BACKDROP -->
+  <div class="absolute inset-0 bg-page/60 backdrop-blur-md" data-contact-close></div>
+
+  <div
+    id="contact-terminal"
+    class="relative w-full max-w-[60%] max-h-[65vh] bg-page border border-primary rounded-lg p-5 contact-terminal flex flex-col"
+    data-terminal-steps={JSON.stringify(terminalSteps)}>
+    <div
+      id="terminal-output"
+      class="flex-1 overflow-y-auto font-inconsolata text-terminal text-primary/60">
+    </div>
+
+    <div id="terminal-prompt-container" class="font-inconsolata text-terminal text-primary">
+      <div id="terminal-enrutado"></div>
+      <div id="terminal-current-prompt" class="mt-1"></div>
+    </div>
+
+    <input
+      id="terminal-input"
+      type="text"
+      autocomplete="off"
+      class="bg-transparent outline-none font-inconsolata text-terminal text-primary"
+    />
   </div>
 </section>
+
+<script>
+  declare global {
+    interface Window {
+      emailjs?: {
+        init: (publicKey: string) => void;
+        send: (
+          serviceId: string,
+          templateId: string,
+          templateParams: Record<string, string>,
+          publicKey?: string
+        ) => Promise<{ status: number; text: string }>;
+      };
+    }
+  }
+
+  const EMAILJS_CONFIG = {
+    SERVICE_ID: 'portfolio_contact',
+    TEMPLATE_ID: 'template_d0tphnm',
+    PUBLIC_KEY: '9lEFur1x0boQrd8n8',
+  };
+
+  function loadEmailJS() {
+    if (typeof window.emailjs !== 'undefined') {
+      console.log('✅ EmailJS ya cargado');
+      initEmailJS();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.async = true;
+
+    script.onload = () => {
+      console.log('📦 EmailJS cargado');
+      initEmailJS();
+    };
+
+    script.onerror = () => {
+      console.error('❌ Error cargando EmailJS');
+      window.emailjs = undefined as any;
+    };
+
+    document.head.appendChild(script);
+  }
+
+  function initEmailJS() {
+    if (typeof window.emailjs === 'undefined' || !window.emailjs) {
+      console.warn('⚠️ EmailJS no disponible');
+      return;
+    }
+
+    try {
+      window.emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+      console.log('🚀 EmailJS inicializado');
+    } catch (error) {
+      console.error('❌ Error inicializando EmailJS:', error);
+    }
+  }
+
+  loadEmailJS();
+
+  const terminalElement = document.getElementById('contact-terminal');
+  const terminalSteps = JSON.parse(terminalElement?.dataset.terminalSteps || '[]');
+  let isEditingField = false;
+
+  interface TerminalStep {
+    id: number;
+    prompt: string;
+    type: 'text' | 'email' | 'message';
+    error: string;
+  }
+
+  let currentStepIndex = 0;
+  let userData = { name: '', email: '', message: '' };
+  let currentStep: TerminalStep | null = null;
+  let isInConfirmation = false;
+  let isInEditMode = false;
+
+  const overlay = document.getElementById('contact-overlay');
+  const terminal = document.getElementById('contact-terminal');
+  const terminalInput = document.getElementById('terminal-input') as HTMLInputElement | null;
+
+  terminal?.addEventListener('click', (e) => e.stopPropagation());
+
+  function addTextToTerminal(text: string, type: 'normal' | 'success' | 'error' = 'normal') {
+    const output = document.getElementById('terminal-output');
+    if (!output) return;
+
+    const line = document.createElement('div');
+    line.textContent = text;
+
+    if (type === 'success') {
+      line.style.color = 'var(--success)';
+    } else if (type === 'error') {
+      line.style.color = 'var(--error)';
+    } else {
+      line.style.color = 'var(--text-primary)';
+      line.style.opacity = '0.6';
+    }
+
+    if (text === '') line.style.minHeight = '1em';
+
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function showPromptInInput() {
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    const promptEl = document.getElementById('terminal-current-prompt');
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+
+    if (!enrutadoEl || !promptEl || !input || !currentStep) return;
+
+    if (userData.name) {
+      enrutadoEl.textContent = `C:\\Users\\${userData.name}`;
+      enrutadoEl.style.display = 'block';
+    } else {
+      enrutadoEl.style.display = 'none';
+    }
+
+    promptEl.textContent = currentStep.prompt;
+    input.value = '';
+    input.placeholder = '';
+    input.focus();
+  }
+
+  function initTerminal() {
+    const output = document.getElementById('terminal-output');
+    if (output) output.innerHTML = '';
+
+    currentStepIndex = 0;
+    currentStep = terminalSteps[0];
+    userData = { name: '', email: '', message: '' };
+    isInConfirmation = false;
+    isInEditMode = false;
+    isEditingField = false;
+
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    const promptEl = document.getElementById('terminal-current-prompt');
+    if (enrutadoEl) enrutadoEl.style.display = 'none';
+    if (promptEl) promptEl.textContent = '';
+
+    addTextToTerminal('betell portfolio [Version 1.0]');
+    addTextToTerminal('Betell. Todos los derechos reservados');
+    addTextToTerminal('');
+    showPromptInInput();
+  }
+
+  function moveOutput(userResponse: string) {
+    if (!currentStep) return;
+
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    if (enrutadoEl && enrutadoEl.textContent && enrutadoEl.style.display !== 'none') {
+      addTextToTerminal(enrutadoEl.textContent);
+    }
+
+    addTextToTerminal(currentStep.prompt);
+    addTextToTerminal(userResponse, 'success');
+
+    if (currentStep.type === 'text') {
+      addTextToTerminal(`C:\\Users\\${userResponse}`);
+    }
+
+    addTextToTerminal('');
+  }
+
+  function validateInput(input: string, type: string): boolean {
+    switch (type) {
+      case 'text':
+        return input.length >= 3;
+      case 'email':
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(input);
+      case 'message':
+        return input.length >= 10;
+      default:
+        return false;
+    }
+  }
+
+  function saveUserData(input: string, type: string) {
+    switch (type) {
+      case 'text':
+        userData.name = input;
+        break;
+      case 'email':
+        userData.email = input;
+        break;
+      case 'message':
+        userData.message = input;
+        break;
+    }
+  }
+
+  async function sendData() {
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+    if (input) {
+      input.disabled = true;
+      input.value = '';
+      input.placeholder = '';
+    }
+
+    const promptEl = document.getElementById('terminal-current-prompt');
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    if (promptEl) promptEl.textContent = '';
+    if (enrutadoEl) enrutadoEl.style.display = 'none';
+
+    addTextToTerminal('Conectando con servidor...');
+    addTextToTerminal('');
+
+    const isTestMode =
+      EMAILJS_CONFIG.SERVICE_ID.includes('tu_service_id') ||
+      EMAILJS_CONFIG.TEMPLATE_ID.includes('tu_template_id') ||
+      typeof window.emailjs === 'undefined' ||
+      !window.emailjs;
+
+    if (isTestMode) {
+      addTextToTerminal('🧪 MODO PRUEBA ACTIVADO', 'success');
+      addTextToTerminal('(Configura EmailJS para envío real)', 'error');
+      addTextToTerminal('');
+
+      addTextToTerminal('Datos que se enviarían:', 'success');
+      addTextToTerminal(`Nombre: ${userData.name}`, 'success');
+      addTextToTerminal(`Email: ${userData.email}`, 'success');
+      addTextToTerminal(
+        `💬 Mensaje: ${userData.message.substring(0, 100)}${userData.message.length > 100 ? '...' : ''}`,
+        'success'
+      );
+      addTextToTerminal('');
+      addTextToTerminal('En producción, esto llegaría a tu email', 'success');
+      addTextToTerminal('Presiona ESC para cerrar');
+      return;
+    }
+
+    try {
+      const templateParams = {
+        from_name: userData.name,
+        from_email: userData.email,
+        message: userData.message,
+        date: new Date().toLocaleDateString('es-ES'),
+        time: new Date().toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+        user_agent: navigator.userAgent.substring(0, 100),
+      };
+
+      addTextToTerminal('Enviando mensaje...');
+
+      const response = await window.emailjs!.send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        templateParams
+      );
+
+      console.log('Email enviado:', response);
+
+      addTextToTerminal('¡Mensaje enviado con éxito!', 'success');
+      addTextToTerminal(`He recibido tu mensaje, ${userData.name}`, 'success');
+      addTextToTerminal('Te responderé lo antes posible', 'success');
+      addTextToTerminal('');
+      addTextToTerminal('Presiona ESC para cerrar');
+    } catch (error) {
+      console.error('Error enviando email:', error);
+
+      addTextToTerminal('Error al enviar el mensaje', 'error');
+      addTextToTerminal('Pero guardé tus datos:', 'error');
+      addTextToTerminal('');
+      addTextToTerminal(`Nombre: ${userData.name}`, 'success');
+      addTextToTerminal(`Email: ${userData.email}`, 'success');
+      addTextToTerminal(`Mensaje: ${userData.message.substring(0, 50)}...`, 'success');
+      addTextToTerminal('');
+      addTextToTerminal('Puedes copiarlos y enviármelos manualmente.', 'error');
+      addTextToTerminal('');
+      addTextToTerminal('Presiona ESC para cerrar');
+
+      if (input) input.disabled = false;
+    }
+  }
+
+  function showEditMenu() {
+    isInConfirmation = false;
+    isInEditMode = true;
+
+    addTextToTerminal('¿Qué campo deseas editar?');
+    addTextToTerminal('1. Nombre');
+    addTextToTerminal('2. Email');
+    addTextToTerminal('3. Mensaje');
+    addTextToTerminal('');
+    addTextToTerminal('Elige un número (1-3):');
+
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    const promptEl = document.getElementById('terminal-current-prompt');
+    if (enrutadoEl) {
+      enrutadoEl.textContent = `C:\\Users\\${userData.name}`;
+      enrutadoEl.style.display = 'block';
+    }
+    if (promptEl) promptEl.textContent = 'Selecciona opción (1-3):';
+
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+    if (input) {
+      input.placeholder = 'Escribe 1, 2 o 3';
+      input.focus();
+      input.value = '';
+    }
+  }
+
+  function showConfirmation() {
+    isInConfirmation = true;
+    isEditingField = false;
+
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    const promptEl = document.getElementById('terminal-current-prompt');
+    if (enrutadoEl) enrutadoEl.style.display = 'none';
+    if (promptEl) promptEl.textContent = '';
+
+    addTextToTerminal('CONFIRMACIÓN', 'success');
+    addTextToTerminal(`Nombre: ${userData.name}`, 'success');
+    addTextToTerminal(`Email: ${userData.email}`, 'success');
+    addTextToTerminal(
+      `Mensaje: ${userData.message.substring(0, 50)}${userData.message.length > 50 ? '...' : ''}`,
+      'success'
+    );
+    addTextToTerminal('');
+    addTextToTerminal('¿Los datos son correctos? (S/N):');
+
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+    if (input) {
+      input.placeholder = 'Escribe S (Sí) o N (No)';
+      input.focus();
+      input.value = '';
+    }
+  }
+
+  function handleConfirmation(answer: string) {
+    const normalized = answer.toLowerCase();
+
+    if (normalized === 's' || normalized === 'si' || normalized === 'sí') {
+      const input = document.getElementById('terminal-input') as HTMLInputElement;
+      if (input) {
+        input.placeholder = '';
+        input.value = '';
+      }
+      sendData();
+    } else if (normalized === 'n' || normalized === 'no') {
+      showEditMenu();
+    } else {
+      addTextToTerminal('Error: Responde S (Sí) o N (No)', 'error');
+      showConfirmation();
+    }
+  }
+
+  function getFieldName(stepIndex: number): string {
+    switch (stepIndex) {
+      case 0:
+        return 'nombre';
+      case 1:
+        return 'email';
+      case 2:
+        return 'mensaje';
+      default:
+        return 'campo';
+    }
+  }
+
+  function handleEditChoice(choice: string) {
+    const option = parseInt(choice);
+
+    if (isNaN(option) || option < 1 || option > 3) {
+      addTextToTerminal('Error: Elige un número válido (1-3)', 'error');
+      showEditMenu();
+      return;
+    }
+
+    isInEditMode = false;
+    isEditingField = true;
+    const stepToEdit = option - 1;
+
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+    if (input) {
+      input.value = '';
+      input.placeholder = '';
+    }
+
+    addTextToTerminal(`Editando ${getFieldName(stepToEdit)}...`);
+    addTextToTerminal('');
+
+    currentStepIndex = stepToEdit;
+    currentStep = terminalSteps[stepToEdit];
+    showPromptInInput();
+  }
+
+  function handleFieldEdit(newValue: string) {
+    if (!currentStep) return;
+
+    if (!validateInput(newValue, currentStep.type)) {
+      addTextToTerminal(`Error: ${currentStep.error}`, 'error');
+      addTextToTerminal('');
+      showPromptInInput();
+      return;
+    }
+
+    saveUserData(newValue, currentStep.type);
+    addTextToTerminal(currentStep.prompt);
+    addTextToTerminal(newValue, 'success');
+    addTextToTerminal(`✓ ${getFieldName(currentStepIndex)} actualizado`, 'success');
+    addTextToTerminal('');
+
+    isEditingField = false;
+    showConfirmation();
+  }
+
+  terminalInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const userInput = terminalInput.value.trim();
+      if (!userInput) return;
+
+      if (isInConfirmation) {
+        handleConfirmation(userInput);
+        terminalInput.value = '';
+        return;
+      }
+
+      if (isInEditMode) {
+        handleEditChoice(userInput);
+        terminalInput.value = '';
+        return;
+      }
+
+      if (isEditingField && currentStep) {
+        if (!validateInput(userInput, currentStep.type)) {
+          addTextToTerminal(`Error: ${currentStep.error}`, 'error');
+          addTextToTerminal('');
+          showPromptInInput();
+          terminalInput.value = '';
+          return;
+        }
+
+        saveUserData(userInput, currentStep.type);
+        addTextToTerminal(currentStep.prompt);
+        addTextToTerminal(userInput, 'success');
+        addTextToTerminal(`✓ ${getFieldName(currentStepIndex)} actualizado`, 'success');
+        addTextToTerminal('');
+
+        isEditingField = false;
+        showConfirmation();
+        terminalInput.value = '';
+        return;
+      }
+
+      if (currentStep) {
+        if (!validateInput(userInput, currentStep.type)) {
+          addTextToTerminal(`Error: ${currentStep.error}`, 'error');
+          addTextToTerminal('');
+          showPromptInInput();
+          terminalInput.value = '';
+          return;
+        }
+
+        moveOutput(userInput);
+        saveUserData(userInput, currentStep.type);
+
+        currentStepIndex++;
+        if (currentStepIndex < terminalSteps.length) {
+          currentStep = terminalSteps[currentStepIndex];
+          showPromptInInput();
+        } else {
+          showConfirmation();
+        }
+
+        terminalInput.value = '';
+      }
+    }
+  });
+
+  const open = () => {
+    overlay?.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      overlay?.classList.add('active');
+      initTerminal();
+    });
+  };
+
+  const close = () => {
+    overlay?.classList.remove('active');
+    overlay?.classList.add('hidden');
+
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+    if (input) {
+      input.disabled = false;
+      input.placeholder = '';
+      input.value = '';
+      input.style.color = '';
+    }
+
+    const enrutadoEl = document.getElementById('terminal-enrutado');
+    const promptEl = document.getElementById('terminal-current-prompt');
+    if (enrutadoEl) {
+      enrutadoEl.textContent = '';
+      enrutadoEl.style.display = 'none';
+      enrutadoEl.style.color = '';
+    }
+    if (promptEl) {
+      promptEl.textContent = '';
+      promptEl.style.color = '';
+    }
+
+    isInEditMode = false;
+    isEditingField = false;
+    isInConfirmation = false;
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay?.classList.contains('active')) close();
+  });
+
+  terminalInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+
+  window.addEventListener('open-contact', open);
+
+  overlay?.addEventListener('click', (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest('[data-contact-close]')) close();
+  });
+</script>

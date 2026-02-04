@@ -268,16 +268,6 @@ body.nav-open #page-content {
   @apply border-2 border-accent scale-y-150;
 }
 
-.cover-fade {
-  transition:
-    opacity 300ms ease,
-    transform 300ms ease;
-}
-.cover-hidden {
-  opacity: 0;
-  transform: scale(0.96);
-}
-
 #contact-overlay {
   opacity: 0;
   pointer-events: none;
@@ -287,17 +277,45 @@ body.nav-open #page-content {
 #contact-overlay.active {
   opacity: 1;
   pointer-events: auto;
+  display: flex;
 }
 
-.contact-terminal {
-  transform: scale(0.96);
-  opacity: 0;
-  filter: blur(6px);
-  transition: all 350ms cubic-bezier(0.16, 1, 0.3, 1);
+#terminal-input::placeholder {
+  color: var(--text-primary);
+  opacity: 0.8;
+  font-family: "Inconsolata", monospace;
 }
 
-#contact-overlay.active .contact-terminal {
-  transform: scale(1);
-  opacity: 1;
-  filter: blur(0);
+#terminal-enrutado {
+  color: var(--text-primary);
+  opacity: 60%;
+}
+
+#terminal-current-prompt {
+  color: var(--text-primary);
+  opacity: 60%;
+}
+
+#terminal-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+#terminal-output::-webkit-scrollbar-track {
+  @apply bg-secondary/40 rounded-lg;
+}
+
+#terminal-output::-webkit-scrollbar-thumb {
+  @apply bg-secondary rounded-lg;
+}
+
+#terminal-output::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent;
+}
+
+.text-terminal-success {
+  color: var(--success);
+}
+
+.text-terminal-error {
+  color: var(--error);
 }
