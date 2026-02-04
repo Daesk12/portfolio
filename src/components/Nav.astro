@@ -43,7 +43,7 @@ import type { Project } from '../data/projects';
         class="text-h3 font-700 font-outfit tracking-wider text-muted underline underline-offset-4">
         PREVIEW
       </h3>
-      <div class="flex flex-col gap-5 max-h-[45vh] overflow-y-auto pr-3 preview-scroll">
+      <div class="flex flex-col gap-5 max-h-[44vh] overflow-y-auto pr-3 preview-scroll">
         {
           projects.slice(0, 4).map((project) => (
             <div class="flex flex-col gap-2 justify-start">
@@ -56,7 +56,7 @@ import type { Project } from '../data/projects';
               <p class="text-author font-manrope tracking-wider font-100 leading-base text-muted">
                 {project.author.replace(/\n/g, ' - ')}
               </p>
-              <p class="text-preview-p font-manrope font-500">
+              <p class="text-preview-p font-manrope font-500 text-muted">
                 {project.preview?.es || 'Descripción no definida'}
               </p>
               <a href={`/trabajos/${project.slug}`}>
@@ -70,20 +70,98 @@ import type { Project } from '../data/projects';
       </div>
     </div>
     <div class="flex justify-between items-center">
-      <p class="text-language font-900 text-muted"><span>ES</span>/<span>EN</span></p>
-      <div class="w-5 h-5 bg-page"></div>
+      <!--
+      <p class="text-language font-900 text-muted">
+        <span>ES</span>/<span>EN</span>
+      </p>
+      -->
+      <div id="theme" class="w-8 h-8 text-muted hover:text-accent">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-8 text-muted hover:text-accent">
+          <path
+            d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z"
+          ></path>
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-8 hidden text-muted hover:text-accent">
+          <path
+            fill-rule="evenodd"
+            d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </div>
     </div>
   </div>
 </nav>
 
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('theme');
+
+    const updateIcons = () => {
+      const icons = themeBtn?.querySelectorAll('svg');
+      if (!icons || icons.length < 2) return;
+
+      const isLight = document.documentElement.classList.contains('light');
+
+      if (isLight) {
+        icons[0].classList.add('hidden');
+        icons[1].classList.remove('hidden');
+      } else {
+        icons[0].classList.remove('hidden');
+        icons[1].classList.add('hidden');
+      }
+
+      console.log('🎨 Icono muestra:', isLight ? 'LUNA 🌙 (clic → DARK)' : 'SOL ☀️ (clic → LIGHT)');
+    };
+
+    updateIcons();
+
+    themeBtn?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isLight = html.classList.contains('light');
+      const newTheme = isLight ? 'dark' : 'light';
+
+      if (newTheme === 'light') {
+        html.classList.add('light');
+        html.classList.remove('dark');
+      } else {
+        html.classList.add('dark');
+        html.classList.remove('light');
+      }
+
+      localStorage.setItem('theme', newTheme);
+
+      updateIcons();
+
+      console.log(
+        '🔄 Cambiado a:',
+        newTheme.toUpperCase(),
+        '| Icono ahora muestra:',
+        newTheme === 'light' ? 'LUNA 🌙' : 'SOL ☀️'
+      );
+    });
+
+    if (themeBtn) {
+      themeBtn.style.cursor = 'pointer';
+      themeBtn.title =
+        'Cambiar a tema ' +
+        (document.documentElement.classList.contains('light') ? 'oscuro' : 'claro');
+    }
+  });
+
   document.addEventListener('click', (e) => {
-  const target = e.target;
-  if (!(target instanceof Element)) return;
+    const target = e.target;
+    if (!(target instanceof Element)) return;
 
-  if (target.closest('[data-contact-open]')) {
-    window.dispatchEvent(new CustomEvent('open-contact'));
-  }
-});
-
+    if (target.closest('[data-contact-open]')) {
+      window.dispatchEvent(new CustomEvent('open-contact'));
+    }
+  });
 </script>

@@ -39,7 +39,7 @@ const currentSong = canciones[initialIndex];
         <button
           id="play"
           aria-label="Reproducir / Pausar"
-          class="p-3 bg-secondary rounded-full hover:bg-accent hover:text-primary transition-all cursor-pointer">
+          class="p-3 bg-secondary rounded-full text-muted hover:bg-accent hover:text-primary transition-all cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -86,10 +86,70 @@ const currentSong = canciones[initialIndex];
   import WaveSurfer from 'wavesurfer.js';
   import { canciones } from '../data/music';
 
-  window.MusicPlayerLogic = (() => {
-    let currentIndex = 0;
+  // ===== VARIABLES GLOBALES CON TIPOS =====
+  let currentIndex: number = 0;
+  let wavesurfer: any = null;
 
-    const wavesurfer = WaveSurfer.create({
+  // ===== FUNCIONES =====
+  function getCurrentSong() {
+    return canciones[currentIndex];
+  }
+
+  function updateWaveColors() {
+    if (!wavesurfer) return;
+
+    const song = getCurrentSong();
+    const isLight = document.documentElement.classList.contains('light');
+
+    const waveColor = isLight ? song.waveColorLight || song.waveColor : song.waveColor;
+
+    const progressColor = isLight
+      ? song.progressColorLight || song.progressColor
+      : song.progressColor;
+
+    // Actualizar colores
+    wavesurfer.setOptions({
+      waveColor,
+      progressColor,
+    });
+
+    // Redibujar (WaveSurfer 7+)
+    if (wavesurfer.drawer?.redraw) {
+      wavesurfer.drawer.redraw();
+    } else if (wavesurfer.drawBuffer) {
+      wavesurfer.drawBuffer(); // Fallback para versiones antiguas
+    }
+
+    console.log('🎨 Colores actualizados:', {
+      tema: isLight ? 'LIGHT' : 'DARK',
+      waveColor,
+      progressColor,
+    });
+  }
+
+  function loadSong(index: number) {
+    const song = canciones[index];
+    const wasPlaying = wavesurfer?.isPlaying() || false;
+
+    wavesurfer?.stop();
+    currentIndex = index;
+
+    wavesurfer?.once('ready', () => {
+      if (wasPlaying) {
+        wavesurfer?.play();
+      }
+    });
+
+    wavesurfer?.load(song.audio);
+    updateWaveColors();
+
+    return song;
+  }
+
+  // ===== INICIALIZACIÓN =====
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Crear WaveSurfer
+    wavesurfer = WaveSurfer.create({
       container: '#waveform',
       height: 128,
       barWidth: 2,
@@ -97,51 +157,10 @@ const currentSong = canciones[initialIndex];
       interact: true,
     });
 
-    const loadSong = (index: number) => {
-      const song = canciones[index];
-      const wasPlaying = wavesurfer.isPlaying();
+    // 2. Cargar primera canción
+    loadSong(0);
 
-      wavesurfer.stop();
-
-      wavesurfer.setOptions({
-        waveColor: song.waveColor,
-        progressColor: song.progressColor,
-      });
-
-      wavesurfer.once('ready', () => {
-        if (wasPlaying) {
-          wavesurfer.play();
-        }
-      });
-
-      wavesurfer.load(song.audio);
-
-      return song;
-    };
-
-    loadSong(currentIndex);
-
-    return {
-      wavesurfer,
-      toggle() {
-        wavesurfer.playPause();
-      },
-      next() {
-        currentIndex = (currentIndex + 1) % canciones.length;
-        return loadSong(currentIndex);
-      },
-      prev() {
-        currentIndex = (currentIndex - 1 + canciones.length) % canciones.length;
-        return loadSong(currentIndex);
-      },
-    };
-  })();
-
-  console.log('🎵 MusicPlayerLogic listo');
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
+    // 3. Configurar botones (con tipos)
     const playBtn = document.getElementById('play') as HTMLButtonElement | null;
     const prevBtn = document.getElementById('prev') as HTMLButtonElement | null;
     const nextBtn = document.getElementById('next') as HTMLButtonElement | null;
@@ -150,41 +169,50 @@ const currentSong = canciones[initialIndex];
     const iconPause = document.getElementById('icon-pause') as SVGElement | null;
 
     if (!playBtn || !prevBtn || !nextBtn || !cover || !iconPlay || !iconPause) {
-      console.error('❌ Elementos del DOM no encontrados');
-      return;
-    }
-
-    const player = window.MusicPlayerLogic;
-
-    if (!player) {
-      console.error('❌ MusicPlayerLogic no encontrado');
+      console.error('❌ Elementos no encontrados');
       return;
     }
 
     playBtn.addEventListener('click', () => {
-      player.toggle();
+      wavesurfer?.playPause();
     });
 
     prevBtn.addEventListener('click', () => {
-      const song = player.prev();
-      cover.src = song.image;
-      cover.alt = song.title;
+      const newIndex = (currentIndex - 1 + canciones.length) % canciones.length;
+      const song = loadSong(newIndex);
+      if (cover) {
+        cover.src = song.image;
+        cover.alt = song.title;
+      }
     });
 
     nextBtn.addEventListener('click', () => {
-      const song = player.next();
-      cover.src = song.image;
-      cover.alt = song.title;
+      const newIndex = (currentIndex + 1) % canciones.length;
+      const song = loadSong(newIndex);
+      if (cover) {
+        cover.src = song.image;
+        cover.alt = song.title;
+      }
     });
 
-    player.wavesurfer.on('play', () => {
-      iconPlay.classList.add('hidden');
-      iconPause.classList.remove('hidden');
+    wavesurfer?.on('play', () => {
+      iconPlay?.classList.add('hidden');
+      iconPause?.classList.remove('hidden');
     });
 
-    player.wavesurfer.on('pause', () => {
-      iconPlay.classList.remove('hidden');
-      iconPause.classList.add('hidden');
+    wavesurfer?.on('pause', () => {
+      iconPlay?.classList.remove('hidden');
+      iconPause?.classList.add('hidden');
     });
+
+    // 4. Observer para cambios de tema
+    const themeObserver = new MutationObserver(updateWaveColors);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    console.log('✅ Music Player inicializado');
+    console.log('✅ Observer de tema activado');
   });
 </script>

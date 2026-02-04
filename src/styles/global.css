@@ -11,9 +11,45 @@ body {
 
 :root {
   --bg-page: #151526;
-  --bg-surface: #131323;
+  --bg-surface: #9599ff;
   --bg-secondary: #d6d7ff;
   --bg-accent: #9599ff;
+
+  --text-primary: #ededf2;
+  --text-secondary: #151526;
+
+  --title-primary: #ededf2;
+  --title-secondary: #151526;
+
+  --accent: #7a7fff;
+
+  --error: #ff3b3b;
+  --success: #3cff9e;
+}
+
+:root.light {
+  --bg-page: #d6d7ff;
+  --bg-surface: #6f74e8;
+  --bg-secondary: #151526;
+  --bg-accent: #6f74e8;
+
+  --text-primary: #151526;
+  --text-secondary: #ededf2;
+
+  --title-primary: #151526;
+  --title-secondary: #ededf2;
+
+  --accent: #6f74e8;
+
+  --error: #ff3b3b;
+  --success: #3cff9e;
+}
+
+[data-theme="dark"] {
+  --bg-page: #151526;
+  --bg-surface: #7a7fff;
+  --bg-secondary: #d6d7ff;
+  --bg-accent: #7a7fff;
 
   --text-primary: #ededf2;
   --text-secondary: #151526;
@@ -30,7 +66,7 @@ body {
 #nav-lateral {
   transform: translateX(calc(-100% + 10px));
   transition: transform 300ms ease;
-  background-color: #d6d7ff;
+  background-color: var(--bg-secondary);
 }
 
 body:not(.nav-open) #nav-lateral:hover {
@@ -73,13 +109,23 @@ body.nav-open #page-content {
   width: 4px;
 }
 
-.preview-scroll::-webkit-scrollbar-thumb {
-  background-color: #151526;
+.preview-scroll::-webkit-scrollbar-track {
+  background-color: color-mix(in srgb, var(--bg-page) 40%, transparent);
   border-radius: 999px;
 }
 
-.preview-scroll::-webkit-scrollbar-track {
-  background-color: #1515266e;
+.preview-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--bg-page);
+  border-radius: 999px;
+}
+
+/* Para light theme, mejorar visibilidad */
+.light .preview-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--bg-page); /* Usar color accent en light */
+}
+
+.light .preview-scroll::-webkit-scrollbar-track {
+  background-color: color-mix(in srgb, var(--bg-page) 20%, transparent);
 }
 
 .projects.grid-view {
@@ -318,4 +364,22 @@ body.nav-open #page-content {
 
 .text-terminal-error {
   color: var(--error);
+}
+
+.light .projects.grid-view img:not([src*=".svg"]) {
+  border: 1px solid var(--bg-secondary) !important;
+}
+
+.light #media-container img:not([src*=".svg"]) {
+  border: 1px solid var(--bg-secondary) !important;
+}
+
+.light img:not([src*=".svg"]) {
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.light img:not([src*=".svg"]):hover {
+  border-color: var(--bg-secondary) !important;
 }

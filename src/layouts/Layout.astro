@@ -12,6 +12,26 @@ import Contact from '../components/Contact.astro';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Betell</title>
+
+    <script>
+      (function () {
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        const initialTheme = savedTheme || (systemPrefersLight ? 'light' : 'dark');
+
+        const html = document.documentElement;
+        if (initialTheme === 'light') {
+          html.classList.add('light');
+          html.classList.remove('dark');
+        } else {
+          html.classList.add('dark');
+          html.classList.remove('light');
+        }
+
+        console.log('🎨 Tema aplicado INMEDIATAMENTE:', initialTheme.toUpperCase());
+      })();
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   </head>
 
@@ -34,28 +54,62 @@ import Contact from '../components/Contact.astro';
       const overlay = document.getElementById('nav-overlay');
 
       const TAB_WIDTH = 10;
-      let isOpen = false;
+      let isOpen = true;
+      let scrollTriggersInitialized = false;
 
       const setNavOffset = (value: number) => {
         document.documentElement.style.setProperty('--nav-offset', `${value}px`);
       };
 
-      setNavOffset(TAB_WIDTH);
+      if (nav) {
+        setTimeout(() => {
+          const navWidth = nav.getBoundingClientRect().width;
+          setNavOffset(navWidth);
+          document.body.classList.add('nav-open');
+          isOpen = true;
+
+          if (!scrollTriggersInitialized && ScrollTrigger) {
+            ScrollTrigger.addEventListener('refreshInit', () => {
+              console.log('ScrollTrigger inicializado correctamente');
+            });
+            scrollTriggersInitialized = true;
+          }
+        }, 100);
+      } else {
+        setNavOffset(TAB_WIDTH);
+      }
 
       const openNav = () => {
         if (!nav) return;
+
         const navWidth = nav.getBoundingClientRect().width;
         isOpen = true;
         setNavOffset(navWidth);
         document.body.classList.add('nav-open');
-        setTimeout(() => ScrollTrigger.refresh(true), 100);
+
+        debouncedScrollTriggerRefresh();
       };
 
       const closeNav = () => {
         isOpen = false;
         setNavOffset(TAB_WIDTH);
         document.body.classList.remove('nav-open');
-        setTimeout(() => ScrollTrigger.refresh(true), 100);
+
+        debouncedScrollTriggerRefresh();
+      };
+
+      let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
+      const debouncedScrollTriggerRefresh = () => {
+        if (refreshTimeout !== null) {
+          clearTimeout(refreshTimeout);
+        }
+        refreshTimeout = setTimeout(() => {
+          if (ScrollTrigger) {
+            console.log('Refrescando ScrollTrigger después de animación');
+            ScrollTrigger.refresh();
+          }
+          refreshTimeout = null;
+        }, 350);
       };
 
       nav?.addEventListener('click', (e) => {
@@ -67,18 +121,38 @@ import Contact from '../components/Contact.astro';
         isOpen ? closeNav() : openNav();
       });
 
+      let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
       window.addEventListener('resize', () => {
         if (!nav) return;
+
+        if (resizeTimeout !== null) {
+          clearTimeout(resizeTimeout);
+        }
+
         const navWidth = nav.getBoundingClientRect().width;
         if (isOpen) {
           setNavOffset(navWidth);
           document.body.classList.add('nav-open');
-          setTimeout(() => ScrollTrigger.refresh(true), 100);
         } else {
           setNavOffset(TAB_WIDTH);
           document.body.classList.remove('nav-open');
-          setTimeout(() => ScrollTrigger.refresh(true), 100);
         }
+
+        resizeTimeout = setTimeout(() => {
+          if (ScrollTrigger) {
+            ScrollTrigger.refresh();
+          }
+          resizeTimeout = null;
+        }, 250);
+      });
+
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          if (ScrollTrigger) {
+            ScrollTrigger.refresh();
+            console.log('ScrollTrigger refrescado después de load');
+          }
+        }, 500);
       });
     </script>
   </body>
