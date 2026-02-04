@@ -27,8 +27,6 @@ import Contact from '../components/Contact.astro';
           html.classList.add('dark');
           html.classList.remove('light');
         }
-
-        console.log('🎨 Tema aplicado INMEDIATAMENTE:', initialTheme.toUpperCase());
       })();
     </script>
 
@@ -38,9 +36,21 @@ import Contact from '../components/Contact.astro';
   <body class="overflow-x-hidden">
     <Nav />
     <Contact />
-    <div id="nav-overlay"></div>
-    <div id="page-content">
-      <main id="main-content" class="min-h-screen bg-page transition-[margin,width] duration-300">
+    <!-- Solo mostrar overlay en desktop -->
+    <div id="nav-overlay" class="hidden lg:block"></div>
+
+    <!-- Contenido principal -->
+    <div
+      id="page-content"
+      class="/* Desktop: con margen para el nav lateral */
+      lg:ml-[calc(25%-10px)] lg:w-[calc(100%-25%+10px)]
+      
+      /* Tablet y móvil: sin margen */
+      w-full
+      
+      /* Transición suave solo en desktop */
+      lg:transition-all lg:duration-300">
+      <main id="main-content" class="min-h-screen bg-page">
         <div class="h-full">
           <slot />
         </div>
@@ -57,12 +67,17 @@ import Contact from '../components/Contact.astro';
       let isOpen = true;
       let scrollTriggersInitialized = false;
 
+      // Solo funciona en desktop (≥ 1024px)
+      const isDesktop = () => window.innerWidth >= 1024;
+
       const setNavOffset = (value: number) => {
+        if (!isDesktop()) return; // Solo en desktop
         document.documentElement.style.setProperty('--nav-offset', `${value}px`);
       };
 
-      if (nav) {
-        setTimeout(() => {
+      const initDesktopNav = () => {
+        // SOLO ejecutar en desktop (≥1024px)
+        if (window.innerWidth >= 1024 && nav) {
           const navWidth = nav.getBoundingClientRect().width;
           setNavOffset(navWidth);
           document.body.classList.add('nav-open');
@@ -74,13 +89,37 @@ import Contact from '../components/Contact.astro';
             });
             scrollTriggersInitialized = true;
           }
+        } else {
+          // En móvil/tablet, asegurar que NO haya clases de desktop
+          document.body.classList.remove('nav-open');
+          document.documentElement.style.removeProperty('--nav-offset');
+
+          // Asegurar que el nav sea visible y en posición correcta
+          if (nav) {
+            // Remover cualquier estilo de transform que haya puesto el JS de desktop
+            nav.style.transform = '';
+            nav.style.position = '';
+            nav.style.top = '';
+            nav.style.left = '';
+            nav.style.right = '';
+            nav.style.width = '';
+            nav.style.height = '';
+          }
+        }
+      };
+
+      if (nav) {
+        setTimeout(() => {
+          initDesktopNav();
         }, 100);
       } else {
-        setNavOffset(TAB_WIDTH);
+        if (isDesktop()) {
+          setNavOffset(TAB_WIDTH);
+        }
       }
 
       const openNav = () => {
-        if (!nav) return;
+        if (!isDesktop() || !nav) return;
 
         const navWidth = nav.getBoundingClientRect().width;
         isOpen = true;
@@ -91,6 +130,8 @@ import Contact from '../components/Contact.astro';
       };
 
       const closeNav = () => {
+        if (!isDesktop()) return;
+
         isOpen = false;
         setNavOffset(TAB_WIDTH);
         document.body.classList.remove('nav-open');
@@ -104,22 +145,24 @@ import Contact from '../components/Contact.astro';
           clearTimeout(refreshTimeout);
         }
         refreshTimeout = setTimeout(() => {
-          if (ScrollTrigger) {
-            console.log('Refrescando ScrollTrigger después de animación');
+          if (ScrollTrigger && isDesktop()) {
             ScrollTrigger.refresh();
           }
           refreshTimeout = null;
         }, 350);
       };
 
-      nav?.addEventListener('click', (e) => {
-        const target = e.target;
-        if (!(target instanceof Element)) return;
+      // Solo añadir el toggle click en desktop
+      if (isDesktop()) {
+        nav?.addEventListener('click', (e) => {
+          const target = e.target;
+          if (!(target instanceof Element)) return;
 
-        if (!target.closest('[data-nav-toggle]')) return;
+          if (!target.closest('[data-nav-toggle]')) return;
 
-        isOpen ? closeNav() : openNav();
-      });
+          isOpen ? closeNav() : openNav();
+        });
+      }
 
       let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
       window.addEventListener('resize', () => {
@@ -129,17 +172,11 @@ import Contact from '../components/Contact.astro';
           clearTimeout(resizeTimeout);
         }
 
-        const navWidth = nav.getBoundingClientRect().width;
-        if (isOpen) {
-          setNavOffset(navWidth);
-          document.body.classList.add('nav-open');
-        } else {
-          setNavOffset(TAB_WIDTH);
-          document.body.classList.remove('nav-open');
-        }
+        // Re-inicializar según el tamaño de pantalla
+        initDesktopNav();
 
         resizeTimeout = setTimeout(() => {
-          if (ScrollTrigger) {
+          if (ScrollTrigger && window.innerWidth >= 1024) {
             ScrollTrigger.refresh();
           }
           resizeTimeout = null;
@@ -148,9 +185,8 @@ import Contact from '../components/Contact.astro';
 
       window.addEventListener('load', () => {
         setTimeout(() => {
-          if (ScrollTrigger) {
+          if (ScrollTrigger && isDesktop()) {
             ScrollTrigger.refresh();
-            console.log('ScrollTrigger refrescado después de load');
           }
         }, 500);
       });

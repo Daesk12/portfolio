@@ -3,42 +3,122 @@ import { projects } from '../data/projects';
 import type { Project } from '../data/projects';
 ---
 
+<button
+  id="mobile-menu-toggle"
+  class="fixed top-4 right-4
+    w-10 h-10
+    flex flex-col justify-center items-center gap-1.5
+    bg-secondary rounded-lg
+    p-2
+    border-2 border-transparent
+    hover:border-accent
+    transition-all duration-200
+    
+    /* Aumentar z-index y asegurar visibilidad */
+    z-9998
+    
+    /* Siempre visible en móvil, oculto en desktop/tablet */
+    lg:hidden
+    md:hidden
+    max-md:flex"
+  aria-label="Abrir menú">
+  <!-- Solo las 3 líneas del hamburguesa -->
+  <span class="w-6 h-0.5 bg-muted rounded-full transition-all"></span>
+  <span class="w-6 h-0.5 bg-muted rounded-full transition-all"></span>
+  <span class="w-6 h-0.5 bg-muted rounded-full transition-all"></span>
+</button>
+
 <nav
   id="nav-lateral"
-  class="fixed left-0 top-0 h-full w-1/4 bg-secondary p-4 transition-transform duration-300 z-50">
-  <div class="absolute inset-0 z-0 pointer-events-auto" data-nav-toggle aria-hidden="true"></div>
-  <div class="relative z-10 flex justify-between h-full flex-col pointer-events-auto">
-    <ul class="flex justify-start flex-col gap-1">
+  class="/* === DESKTOP (base) === */
+    fixed left-0 top-0 h-full w-1/4 bg-secondary p-4 transition-transform duration-300 z-50
+    
+    /* === TABLET (max-width: 1024px) === */
+    max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:right-0 max-lg:w-full max-lg:p-4
+    max-lg:flex max-lg:flex-row max-lg:items-center max-lg:justify-between
+    max-lg:h-auto
+    
+    /* === MÓVIL (max-width: 768px) === */
+    max-md:fixed max-md:top-0 max-md:left-0 max-md:right-0 max-md:w-full
+    max-md:flex-col max-md:items-center max-md:justify-center
+    max-md:min-h-screen
+    /* IMPORTANTE: Reducir z-index del menú */
+    max-md:z-30
+    max-md:transform max-md:-translate-y-full
+    max-md:transition-transform max-md:duration-500 max-md:ease-out">
+  <div
+    class="absolute inset-0 z-0 pointer-events-auto max-lg:hidden"
+    data-nav-toggle
+    aria-hidden="true">
+  </div>
+
+  <div
+    class="relative z-10 flex justify-between h-full flex-col pointer-events-auto
+      
+      max-lg:flex-row max-lg:items-center max-lg:w-full max-lg:h-auto
+      
+      max-md:flex-col max-md:items-center max-md:justify-center
+      max-md:min-h-screen max-md:w-full max-md:px-6 max-md:py-20
+      max-md:gap-8">
+    <ul
+      class="flex justify-between flex-col gap-1
+            max-lg:flex-row max-lg:items-center max-lg:gap-6
+            max-md:flex-col max-md:items-center max-md:gap-2 max-md:w-full">
       <li>
         <a
           href="/"
-          class="hover:text-accent text-muted font-extrabold tracking-wide text-h3 font-outfit">
+          class="hover:text-accent text-muted font-extrabold tracking-wide text-h3 font-outfit
+          max-md:text-2xl">
           BETELL
         </a>
       </li>
       <li>
         <a
           href="/trabajos/home"
-          class="hover:text-accent text-muted font-extrabold tracking-wide font-outfit text-h3">
+          class="hover:text-accent text-muted font-extrabold tracking-wide font-outfit text-h3
+          max-md:text-2xl">
           TRABAJOS
         </a>
       </li>
       <li>
         <a
           href="/sobre-mi"
-          class="hover:text-accent text-muted font-extrabold tracking-wide font-outfit text-h3">
+          class="hover:text-accent text-muted font-extrabold tracking-wide font-outfit text-h3
+          max-md:text-2xl">
           SOBRE MI
         </a>
       </li>
-      <button
-        id="contact-button"
-        data-contact-open
-        class="bg-page p-2.5 w-full text-primary text-button rounded-lg hover:bg-accent hover:text-muted font-medium tracking-lg font-outfit cursor-pointer">
-        Contacto
-      </button>
+
+      <!-- Botón Contacto - posición diferente según dispositivo -->
+      <li
+        class="/* DESKTOP: ocultar (está abajo) */
+          
+          /* TABLET & MÓVIL: mostrar aquí */
+          max-lg:block
+          max-md:w-full max-md:text-center max-md:mt-4">
+        <button
+          id="contact-button-mobile"
+          data-contact-open
+          class="bg-page p-2.5 text-primary text-button rounded-lg
+            hover:bg-accent hover:text-muted font-medium tracking-lg
+            font-outfit cursor-pointer transition-colors
+            
+            /* TABLET */
+            max-lg:px-6
+            
+            /* MÓVIL */
+            max-md:w-auto max-md:max-w-xs max-md:text-lg max-md:py-3">
+          Contacto
+        </button>
+      </li>
     </ul>
 
-    <div class="flex justify-start gap-2 flex-col">
+    <!-- PREVIEW SECTION - Solo en desktop (RESTAURADO) -->
+    <div
+      class="flex justify-start gap-2 flex-col
+        
+        /* TABLET & MÓVIL: ocultar */
+        max-lg:hidden">
       <h3
         class="text-h3 font-700 font-outfit tracking-wider text-muted underline underline-offset-4">
         PREVIEW
@@ -69,18 +149,31 @@ import type { Project } from '../data/projects';
         }
       </div>
     </div>
-    <div class="flex justify-between items-center">
-      <!--
-      <p class="text-language font-900 text-muted">
-        <span>ES</span>/<span>EN</span>
-      </p>
-      -->
-      <div id="theme" class="w-8 h-8 text-muted hover:text-accent">
+
+    <!-- Footer del nav (RESTAURADO) -->
+    <div
+      class="/* DESKTOP */
+        flex justify-between items-center
+        
+        /* TABLET */
+        max-lg:flex-row max-lg:gap-4
+        
+        /* MÓVIL */
+        max-md:flex-col">
+      <div
+        id="theme"
+        class="w-8 h-8 text-muted hover:text-accent cursor-pointer
+          
+          /* TABLET: alinear a la derecha */
+          max-lg:ml-auto
+          
+          /* MÓVIL: centrar */
+          max-md:mx-auto">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="size-8 text-muted hover:text-accent">
+          class="size-8 text-muted hover:text-accent transition-colors">
           <path
             d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z"
           ></path>
@@ -102,66 +195,142 @@ import type { Project } from '../data/projects';
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const themeBtn = document.getElementById('theme');
+    // ========== ELEMENTOS PRINCIPALES ==========
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const nav = document.getElementById('nav-lateral');
 
-    const updateIcons = () => {
-      const icons = themeBtn?.querySelectorAll('svg');
-      if (!icons || icons.length < 2) return;
+    // ========== VERIFICAR SI ESTAMOS EN MÓVIL ==========
+    // SI estamos en desktop, NO ejecutar el código de toggle
+    if (window.innerWidth >= 1024) {
+      console.log('Desktop detectado - desactivando toggle móvil');
+      // Solo mantener la funcionalidad del tema
+      initTheme();
+      return;
+    }
 
-      const isLight = document.documentElement.classList.contains('light');
+    // ========== FUNCIÓN TOGGLE SIMPLE ==========
+    function toggleMobileMenu() {
+      if (!nav || !toggleBtn) return;
 
-      if (isLight) {
-        icons[0].classList.add('hidden');
-        icons[1].classList.remove('hidden');
+      const isMenuOpen = !nav.classList.contains('max-md:-translate-y-full');
+
+      if (isMenuOpen) {
+        // Cerrar menú
+        nav.classList.add('max-md:-translate-y-full');
+        nav.classList.remove('max-md:translate-y-0');
+        document.body.style.overflow = '';
+        toggleBtn.setAttribute('aria-label', 'Abrir menú');
       } else {
-        icons[0].classList.remove('hidden');
-        icons[1].classList.add('hidden');
+        // Abrir menú
+        nav.classList.remove('max-md:-translate-y-full');
+        nav.classList.add('max-md:translate-y-0');
+        document.body.style.overflow = 'hidden';
+        toggleBtn.setAttribute('aria-label', 'Cerrar menú');
       }
+    }
 
-      console.log('🎨 Icono muestra:', isLight ? 'LUNA 🌙 (clic → DARK)' : 'SOL ☀️ (clic → LIGHT)');
-    };
+    // ========== FUNCIÓN CERRAR MENÚ ==========
+    function closeMobileMenu() {
+      if (!nav || !toggleBtn) return;
 
-    updateIcons();
+      nav.classList.add('max-md:-translate-y-full');
+      nav.classList.remove('max-md:translate-y-0');
+      document.body.style.overflow = '';
+      toggleBtn.setAttribute('aria-label', 'Abrir menú');
+    }
 
-    themeBtn?.addEventListener('click', () => {
-      const html = document.documentElement;
-      const isLight = html.classList.contains('light');
-      const newTheme = isLight ? 'dark' : 'light';
+    // ========== FUNCIÓN ABRIR CONTACTO ==========
+    function openContactModal() {
+      closeMobileMenu();
+      window.dispatchEvent(new CustomEvent('open-contact'));
+    }
 
-      if (newTheme === 'light') {
-        html.classList.add('light');
-        html.classList.remove('dark');
-      } else {
-        html.classList.add('dark');
-        html.classList.remove('light');
+    // ========== INICIALIZACIÓN ==========
+
+    // 1. Configurar botón hamburguesa
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', toggleMobileMenu);
+    }
+
+    // 2. Configurar botones de contacto
+    const contactButtons = document.querySelectorAll('[data-contact-open]');
+    contactButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openContactModal();
+      });
+    });
+
+    // 3. Cerrar menú al hacer clic en enlaces
+    const navLinks = document.querySelectorAll('#nav-lateral a[href]:not([data-contact-open])');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        closeMobileMenu();
+      });
+    });
+
+    // 4. Cerrar menú al presionar Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMobileMenu();
       }
+    });
 
-      localStorage.setItem('theme', newTheme);
+    // 5. Cerrar menú al cambiar a tablet/desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        closeMobileMenu();
+      }
+    });
+
+    // ========== TEMA ==========
+    function initTheme() {
+      const themeBtn = document.getElementById('theme');
+
+      const updateIcons = () => {
+        const icons = themeBtn?.querySelectorAll('svg');
+        if (!icons || icons.length < 2) return;
+
+        const isLight = document.documentElement.classList.contains('light');
+
+        if (isLight) {
+          icons[0].classList.add('hidden');
+          icons[1].classList.remove('hidden');
+        } else {
+          icons[0].classList.remove('hidden');
+          icons[1].classList.add('hidden');
+        }
+      };
 
       updateIcons();
 
-      console.log(
-        '🔄 Cambiado a:',
-        newTheme.toUpperCase(),
-        '| Icono ahora muestra:',
-        newTheme === 'light' ? 'LUNA 🌙' : 'SOL ☀️'
-      );
-    });
+      themeBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const html = document.documentElement;
+        const isLight = html.classList.contains('light');
+        const newTheme = isLight ? 'dark' : 'light';
 
-    if (themeBtn) {
-      themeBtn.style.cursor = 'pointer';
-      themeBtn.title =
-        'Cambiar a tema ' +
-        (document.documentElement.classList.contains('light') ? 'oscuro' : 'claro');
+        if (newTheme === 'light') {
+          html.classList.add('light');
+          html.classList.remove('dark');
+        } else {
+          html.classList.add('dark');
+          html.classList.remove('light');
+        }
+
+        localStorage.setItem('theme', newTheme);
+        updateIcons();
+      });
+
+      if (themeBtn) {
+        themeBtn.style.cursor = 'pointer';
+        themeBtn.title =
+          'Cambiar a tema ' +
+          (document.documentElement.classList.contains('light') ? 'oscuro' : 'claro');
+      }
     }
-  });
 
-  document.addEventListener('click', (e) => {
-    const target = e.target;
-    if (!(target instanceof Element)) return;
-
-    if (target.closest('[data-contact-open]')) {
-      window.dispatchEvent(new CustomEvent('open-contact'));
-    }
+    // Inicializar tema siempre
+    initTheme();
   });
 </script>

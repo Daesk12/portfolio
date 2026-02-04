@@ -63,46 +63,75 @@ body {
   --success: #3cff9e;
 }
 
+/* === NAV LATERAL - VERSIÓN SIMPLIFICADA === */
 #nav-lateral {
+  /* Desktop - posicion lateral */
   transform: translateX(calc(-100% + 10px));
   transition: transform 300ms ease;
   background-color: var(--bg-secondary);
 }
 
-body:not(.nav-open) #nav-lateral:hover {
-  box-shadow: 12px 0 30px rgba(0, 0, 0, 0.705);
+/* Hover solo en desktop */
+@media (min-width: 1024px) {
+  body:not(.nav-open) #nav-lateral:hover {
+    box-shadow: 12px 0 30px rgba(0, 0, 0, 0.705);
+  }
+
+  body.nav-open #nav-lateral {
+    transform: translateX(0);
+  }
 }
 
-#nav-overlay {
-  position: fixed;
-  top: 0;
-  left: var(--nav-width, 25%);
-  right: 0;
-  bottom: 0;
-  background: transparent;
-  pointer-events: none;
-  z-index: 40;
-}
-
-body.nav-open #nav-overlay {
-  pointer-events: none;
-}
-
-body.nav-open #nav-lateral {
-  transform: translateX(0);
+/* === CONTENIDO === */
+#page-content {
+  /* Desktop: con margen para nav lateral */
+  @media (min-width: 1024px) {
+    width: calc(100vw - var(--nav-offset, 10px));
+    margin-left: var(--nav-offset, 10px);
+    transition:
+      margin 200ms linear,
+      width 200ms linear;
+  }
 }
 
 body.nav-open #page-content {
-  margin-left: 25%;
-  width: calc(100% - 25%);
+  /* Solo aplica en desktop */
+  @media (min-width: 1024px) {
+    margin-left: 25%;
+    width: calc(100% - 25%);
+  }
 }
 
-#page-content {
-  width: calc(100vw - var(--nav-offset, 10px));
-  margin-left: var(--nav-offset, 10px);
-  transition:
-    margin 200ms linear,
-    width 200ms linear;
+/* === FORZAR COMPORTAMIENTO EN TABLET/MÓVIL (IMPORTANTE) === */
+@media (max-width: 1023px) {
+  #nav-lateral {
+    transform: translateX(0) !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    z-index: 100 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 1rem !important;
+  }
+
+  #page-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-top: 80px !important;
+    transition: none !important;
+  }
+
+  #nav-overlay {
+    display: none !important;
+  }
+
+  body.nav-open #page-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
 }
 
 .preview-scroll::-webkit-scrollbar {
@@ -382,4 +411,8 @@ body.nav-open #page-content {
 
 .light img:not([src*=".svg"]):hover {
   border-color: var(--bg-secondary) !important;
+}
+
+body {
+  background: var(--bg-page) !important;
 }
