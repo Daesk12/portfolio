@@ -7,11 +7,20 @@ import { terminalSteps } from '../data/terminal';
   id="contact-overlay"
   class="fixed inset-0 items-center justify-center z-9999 hidden">
   <!-- BACKDROP -->
-  <div class="absolute inset-0 bg-page/60 backdrop-blur-md" data-contact-close></div>
+  <div
+    class="absolute inset-0 bg-page/80"
+    style="
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(var(--color-page), 0.6);
+  "
+    data-contact-close>
+  </div>
 
   <div
     id="contact-terminal"
-    class="relative w-full max-w-[60%] max-h-[65vh] bg-page border border-primary rounded-lg p-5 contact-terminal flex flex-col"
+    class="relative w-full max-w-[60%] max-h-[65vh] bg-page border border-primary rounded-lg p-5 contact-terminal flex flex-col
+    max-lg:max-w-[80%] max-lg:max-h-[35vh] max-md:max-h-[50vh]"
     data-terminal-steps={JSON.stringify(terminalSteps)}>
     <div
       id="terminal-output"
