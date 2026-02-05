@@ -489,4 +489,8 @@ body {
   .projects.grid-view .project-featured p {
     @apply text-muted font-outfit text-caption bg-secondary p-2 tracking-wide rounded-lg w-fit font-500 italic;
   }
+
+  .palette-active {
+    @apply border-2 border-accent scale-y-100;
+  }
 }

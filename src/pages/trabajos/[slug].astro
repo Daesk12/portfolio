@@ -29,9 +29,12 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
 ---
 
 <Layout>
-  <section class="w-full h-auto p-20 flex flex-col gap-10">
-    <div class="flex justify-between items-center">
-      <div class="flex flex-col">
+  <section class="w-full h-auto p-20 flex flex-col gap-10
+  max-lg:px-12 max-md:px-8">
+    <div
+      class="flex justify-between items-center
+    max-md:flex-col max-md:text-center max-md:gap-10">
+      <div class="flex flex-col max-md:gap-1">
         <h1 class="font-inconsolata text-h1 text-primary font-500 tracking-wider">
           {project.title}
         </h1>
@@ -41,17 +44,21 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
       </div>
       <div class="flex flex-col gap-1">
         <h3
-          class="text-caption text-primary tracking-widest font-manrope font-800 text-right uppercase">
+          class="text-caption text-primary tracking-widest font-manrope font-800 text-right uppercase
+          max-md:text-center">
           Autor(es)
         </h3>
         <p
-          class="text-caption text-primary/80 tracking-widest font-manrope font-medium uppercase text-right whitespace-pre-line">
+          class="text-caption text-primary/80 tracking-widest font-manrope font-medium uppercase text-right whitespace-pre-line
+          max-md:text-center">
           {project.author}
         </p>
       </div>
     </div>
-    <div class="flex justify-between">
-      <div class="w-4/9 flex flex-col gap-5">
+    <div class="flex justify-between
+    max-md:flex-col max-md:justify-center max-md:gap-5">
+      <div class="w-4/9 flex flex-col gap-5
+      max-md:w-full">
         <div class="flex flex-col gap-1">
           <h2 class="text-caption text-primary font-600 font-manrope tracking-wider">
             Descripción general del proyecto:
@@ -69,7 +76,8 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
           </p>
         </div>
       </div>
-      <div class="w-4/9 flex flex-col">
+      <div class="w-4/9 flex flex-col
+      max-md:w-full">
         <div
           id="ddescription"
           class="line-clamp-7 transition-all prose prose-primary prose-h2:mb-0"
@@ -87,10 +95,13 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
     {
       project.palette && project.palette.length > 0 && (
         <div id="palette" class="grid grid-cols items-center gap-6">
-          <div class="grid grid-cols-5 gap-2">
+          <div
+            class="grid grid-cols-5 gap-2
+          max-md:grid-cols-1">
             {project.palette.map((color) => (
               <button
-                class="h-12 w-full rounded-lg transition hover:scale-y-150 hover:border-accent/50 border border-primary cursor-pointer"
+                class="h-12 w-full rounded-lg transition hover:scale-y-150 hover:border-accent/50 border border-primary cursor-pointer
+                max-md:hover:scale-y-100"
                 style={`background-color: ${color.hex}`}
                 data-color={color.hex}
                 aria-label={`Aplicar color ${color.hex}`}
@@ -110,7 +121,8 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
                 <img
                   src={hero.src}
                   alt={project.title}
-                  class="media-image w-full aspect-video object-cover rounded-lg"
+                  class="media-image w-full aspect-video object-cover rounded-lg
+                  max-md:aspect-16/10"
                 />
               )}
 
@@ -122,14 +134,16 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
                   muted
                   loop
                   playsinline
-                  class="media-image w-full aspect-video object-cover rounded-lg"
+                  class="media-image w-full aspect-video object-cover rounded-lg
+                  max-md:aspect-16/10"
                 />
               )}
             </>
           )
         }
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-2 gap-6
+      max-md:grid-cols-1">
         {
           mediums.map((img) => (
             <div class="media-wrapper">
@@ -144,7 +158,8 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
         }
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-3 gap-6
+      max-md:grid-cols-1">
         {
           details.map((img) => (
             <div class="media-wrapper">
@@ -152,7 +167,8 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
                 src={img.src}
                 alt=""
                 loading="lazy"
-                class="media-image w-full aspect-square object-cover rounded-lg"
+                class="media-image w-full aspect-square object-cover rounded-lg
+                max-md:aspect-16/10"
               />
             </div>
           ))
@@ -200,31 +216,34 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
 
     /* ---------- Paleta interactiva ---------- */
     let activeButton: HTMLButtonElement | null = null;
+    const isMobile = window.innerWidth < 768; // Detecta si es móvil
 
     paletteButtons.forEach((btn) => {
       const color = btn.dataset.color;
       if (!color) return;
 
-      // Hover (preview)
-      btn.addEventListener('mouseenter', () => {
-        if (btn !== activeButton) {
-          if (activeButton) return;
+      // Hover (preview) - solo en desktop
+      if (!isMobile) {
+        btn.addEventListener('mouseenter', () => {
+          if (btn !== activeButton) {
+            if (activeButton) return;
 
-          mediaContainer.style.setProperty('--image-tint', color);
-          mediaContainer.dataset.active = 'true';
-        }
-      });
+            mediaContainer.style.setProperty('--image-tint', color);
+            mediaContainer.dataset.active = 'true';
+          }
+        });
 
-      btn.addEventListener('mouseleave', () => {
-        if (!activeButton) {
-          if (activeButton) return;
+        btn.addEventListener('mouseleave', () => {
+          if (!activeButton) {
+            if (activeButton) return;
 
-          mediaContainer.style.setProperty('--image-tint', 'transparent');
-          delete mediaContainer.dataset.active;
-        }
-      });
+            mediaContainer.style.setProperty('--image-tint', 'transparent');
+            delete mediaContainer.dataset.active;
+          }
+        });
+      }
 
-      // Click (toggle)
+      // Click (toggle) - funciona en ambos, pero sin scale en móvil
       btn.addEventListener('click', () => {
         const isActive = btn === activeButton;
 
