@@ -6,7 +6,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "clean": "rm -rf dist",
+    "clean:win": "if exist dist rmdir /s /q dist",
+    "rebuild": "npm run clean && npm run build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
