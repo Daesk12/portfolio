@@ -102,8 +102,33 @@ body.nav-open #page-content {
   }
 }
 
-/* === FORZAR COMPORTAMIENTO EN TABLET/MÓVIL (IMPORTANTE) === */
-@media (max-width: 1023px) {
+/* ===== REGLAS PARA MOBILE (≤640px) ===== */
+@media (max-width: 640px) {
+  #page-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-top: 0 !important; /* Sin padding */
+    transition: none !important;
+  }
+
+  #main-content {
+    padding-top: 20px !important; /* Sin padding */
+  }
+}
+
+/* ===== REGLAS PARA TABLET (641px-1024px) ===== */
+@media (min-width: 641px) and (max-width: 1024px) {
+  #page-content {
+    padding-top: 40px !important; /* Solo tablet tiene 40px */
+  }
+
+  #main-content {
+    padding-top: 40px !important; /* Solo tablet tiene 40px */
+  }
+}
+
+/* ===== REGLAS PARA MOBILE + TABLET (≤1024px) ===== */
+@media (max-width: 1024px) {
   #nav-lateral {
     transform: translateX(0) !important;
     position: fixed !important;
@@ -120,7 +145,6 @@ body.nav-open #page-content {
   #page-content {
     width: 100% !important;
     margin-left: 0 !important;
-    padding-top: 80px !important;
     transition: none !important;
   }
 
@@ -317,7 +341,7 @@ body.nav-open #page-content {
   position: absolute;
   inset: 0;
   background-color: var(--image-tint);
-  opacity: 0; /* 👈 CLAVE */
+  opacity: 0;
   mix-blend-mode: overlay;
   pointer-events: none;
   transition: opacity 0.3s ease;

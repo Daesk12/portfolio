@@ -40,16 +40,7 @@ import Contact from '../components/Contact.astro';
     <div id="nav-overlay" class="hidden lg:block"></div>
 
     <!-- Contenido principal -->
-    <div
-      id="page-content"
-      class="/* Desktop: con margen para el nav lateral */
-      lg:ml-[calc(25%-10px)] lg:w-[calc(100%-25%+10px)]
-      
-      /* Tablet y móvil: sin margen */
-      w-full
-      
-      /* Transición suave solo en desktop */
-      lg:transition-all lg:duration-300">
+    <div id="page-content" class="w-full lg:transition-all lg:duration-300">
       <main id="main-content" class="min-h-screen bg-page">
         <div class="h-full">
           <slot />
@@ -60,135 +51,196 @@ import Contact from '../components/Contact.astro';
 
     <script>
       import { gsap, ScrollTrigger } from '../lib/gsap';
-      const nav = document.getElementById('nav-lateral');
-      const overlay = document.getElementById('nav-overlay');
 
-      const TAB_WIDTH = 10;
+      // Variables globales para el estado del nav
       let isOpen = true;
-      let scrollTriggersInitialized = false;
+      let navInstance: HTMLElement | null = null;
+      let resizeTimeout: NodeJS.Timeout | undefined;
 
-      // Solo funciona en desktop (≥ 1024px)
-      const isDesktop = () => window.innerWidth >= 1024;
+      // Función CRÍTICA: Calcular y aplicar el ancho inicial
+      const applyInitialNavWidth = () => {
+        navInstance = document.getElementById('nav-lateral');
+
+        if (!navInstance || window.innerWidth < 1024) return;
+
+        // 1. REMOVER temporalmente la transform para medir el ancho REAL
+        const originalTransform = navInstance.style.transform;
+        navInstance.style.transform = 'none';
+        navInstance.style.opacity = '0'; // Ocultar momentáneamente
+
+        // 2. Forzar reflow para que el navegador calcule el ancho sin transform
+        void navInstance.offsetWidth;
+
+        // 3. Obtener el ancho REAL del nav (sin transformaciones CSS)
+        const navWidth = navInstance.scrollWidth;
+        console.log('Ancho REAL del nav:', navWidth);
+
+        // 4. Aplicar el ancho como variable CSS
+        document.documentElement.style.setProperty('--nav-offset', `${navWidth}px`);
+
+        // 5. Restaurar la transform y mostrar
+        navInstance.style.transform = originalTransform;
+        setTimeout(() => {
+          navInstance!.style.opacity = '1';
+        }, 10);
+
+        // 6. Aplicar clase de estado abierto
+        document.body.classList.add('nav-open');
+        isOpen = true;
+
+        return navWidth;
+      };
 
       const setNavOffset = (value: number) => {
-        if (!isDesktop()) return; // Solo en desktop
         document.documentElement.style.setProperty('--nav-offset', `${value}px`);
       };
 
-      const initDesktopNav = () => {
-        // SOLO ejecutar en desktop (≥1024px)
-        if (window.innerWidth >= 1024 && nav) {
-          const navWidth = nav.getBoundingClientRect().width;
+      const setupNavToggle = () => {
+        if (!navInstance || window.innerWidth < 1024) return;
+
+        navInstance.addEventListener('click', (e) => {
+          const target = e.target as Element;
+          const toggleElement = target.closest('[data-nav-toggle]');
+
+          if (toggleElement) {
+            e.preventDefault();
+            toggleNav();
+          }
+        });
+      };
+
+      const toggleNav = () => {
+        if (!navInstance || window.innerWidth < 1024) return;
+
+        if (isOpen) {
+          // CERRAR nav - mostrar solo la pestaña (10px)
+          setNavOffset(10);
+          document.body.classList.remove('nav-open');
+          isOpen = false;
+          console.log('Nav cerrado');
+        } else {
+          // ABRIR nav - mostrar completo
+          const navWidth = navInstance.scrollWidth;
           setNavOffset(navWidth);
           document.body.classList.add('nav-open');
           isOpen = true;
-
-          if (!scrollTriggersInitialized && ScrollTrigger) {
-            ScrollTrigger.addEventListener('refreshInit', () => {
-              console.log('ScrollTrigger inicializado correctamente');
-            });
-            scrollTriggersInitialized = true;
-          }
-        } else {
-          // En móvil/tablet, asegurar que NO haya clases de desktop
-          document.body.classList.remove('nav-open');
-          document.documentElement.style.removeProperty('--nav-offset');
-
-          // Asegurar que el nav sea visible y en posición correcta
-          if (nav) {
-            // Remover cualquier estilo de transform que haya puesto el JS de desktop
-            nav.style.transform = '';
-            nav.style.position = '';
-            nav.style.top = '';
-            nav.style.left = '';
-            nav.style.right = '';
-            nav.style.width = '';
-            nav.style.height = '';
-          }
+          console.log('Nav abierto - Ancho:', navWidth);
         }
-      };
 
-      if (nav) {
+        // Refrescar ScrollTrigger después de la animación
         setTimeout(() => {
-          initDesktopNav();
-        }, 100);
-      } else {
-        if (isDesktop()) {
-          setNavOffset(TAB_WIDTH);
-        }
-      }
-
-      const openNav = () => {
-        if (!isDesktop() || !nav) return;
-
-        const navWidth = nav.getBoundingClientRect().width;
-        isOpen = true;
-        setNavOffset(navWidth);
-        document.body.classList.add('nav-open');
-
-        debouncedScrollTriggerRefresh();
-      };
-
-      const closeNav = () => {
-        if (!isDesktop()) return;
-
-        isOpen = false;
-        setNavOffset(TAB_WIDTH);
-        document.body.classList.remove('nav-open');
-
-        debouncedScrollTriggerRefresh();
-      };
-
-      let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
-      const debouncedScrollTriggerRefresh = () => {
-        if (refreshTimeout !== null) {
-          clearTimeout(refreshTimeout);
-        }
-        refreshTimeout = setTimeout(() => {
-          if (ScrollTrigger && isDesktop()) {
+          if (typeof ScrollTrigger !== 'undefined') {
             ScrollTrigger.refresh();
           }
-          refreshTimeout = null;
         }, 350);
       };
 
-      // Solo añadir el toggle click en desktop
-      if (isDesktop()) {
-        nav?.addEventListener('click', (e) => {
-          const target = e.target;
-          if (!(target instanceof Element)) return;
+      // INICIALIZACIÓN PRINCIPAL - SECUENCIA CORRECTA
+      const initDesktopNav = () => {
+        // Solo en desktop
+        if (window.innerWidth < 1024) {
+          // Reset para mobile
+          document.body.classList.remove('nav-open');
+          document.documentElement.style.removeProperty('--nav-offset');
+          return;
+        }
 
-          if (!target.closest('[data-nav-toggle]')) return;
+        console.log('🔄 Inicializando nav desktop...');
 
-          isOpen ? closeNav() : openNav();
+        // 1. Aplicar ancho inicial (CRÍTICO)
+        const initialWidth = applyInitialNavWidth();
+
+        // 2. Configurar toggle
+        setupNavToggle();
+
+        console.log('✅ Nav inicializado. Ancho:', initialWidth);
+      };
+
+      // Inicializar ScrollTrigger
+      const initScrollTriggers = () => {
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.matchMedia({
+            '(min-width: 1024px)': function () {
+              console.log('📱 ScrollTrigger activo para desktop');
+
+              // Pequeño delay para asegurar que el DOM está listo
+              setTimeout(() => {
+                initDesktopNav();
+              }, 50);
+
+              return () => {
+                console.log('🧹 Limpiando ScrollTrigger desktop');
+              };
+            },
+
+            '(max-width: 1023px)': function () {
+              console.log('📱 Modo mobile/tablet activo');
+
+              // Resetear para mobile
+              isOpen = false;
+              document.body.classList.remove('nav-open');
+              document.documentElement.style.removeProperty('--nav-offset');
+
+              if (navInstance) {
+                navInstance.style.transform = '';
+                navInstance.style.opacity = '1';
+              }
+
+              return () => {
+                console.log('🧹 Limpiando ScrollTrigger mobile');
+              };
+            },
+          });
+
+          // Refrescar ScrollTrigger después de que todo esté listo
+          setTimeout(() => {
+            ScrollTrigger.refresh();
+            console.log('🔄 ScrollTrigger refrescado');
+          }, 300);
+        }
+      };
+
+      // PUNTO DE ENTRADA PRINCIPAL - Orden correcto
+      const initApp = () => {
+        // 1. Inicializar nav inmediatamente (para primera carga)
+        initDesktopNav();
+
+        // 2. Inicializar ScrollTrigger
+        initScrollTriggers();
+
+        // 3. Forzar un refresh después de que todo cargue
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            initDesktopNav(); // Re-aplicar por si hay imágenes/fuentes que cambian el layout
+            if (typeof ScrollTrigger !== 'undefined') {
+              ScrollTrigger.refresh();
+            }
+          }, 500);
         });
+      };
+
+      // Ejecutar cuando el DOM esté listo
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
       }
 
-      let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+      // Manejar resize
       window.addEventListener('resize', () => {
-        if (!nav) return;
-
-        if (resizeTimeout !== null) {
+        if (resizeTimeout) {
           clearTimeout(resizeTimeout);
         }
 
-        // Re-inicializar según el tamaño de pantalla
-        initDesktopNav();
-
         resizeTimeout = setTimeout(() => {
-          if (ScrollTrigger && window.innerWidth >= 1024) {
-            ScrollTrigger.refresh();
-          }
-          resizeTimeout = null;
-        }, 250);
-      });
+          initDesktopNav();
 
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          if (ScrollTrigger && isDesktop()) {
+          if (typeof ScrollTrigger !== 'undefined') {
             ScrollTrigger.refresh();
           }
-        }, 500);
+
+          resizeTimeout = undefined;
+        }, 250);
       });
     </script>
   </body>

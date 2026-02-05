@@ -2,10 +2,10 @@
 import BetellSvg from '../assets/betell.svg?raw';
 ---
 
-<div id="hero-wrapper" class="px-24">
-  <header id="hero-trigger" class="pt-16 w-full" style="min-height:170vh">
+<div id="hero-wrapper" class="px-24 max-lg:px-12 max-md:px-8 max-sm:px-6">
+  <header id="hero-trigger" class="pt-16 max-sm:pt-0 w-full">
     <div id="hero-pin-wrapper">
-      <div id="hero-pin" class="flex flex-col items-center w-full gap-5">
+      <div id="hero-pin" class="flex flex-col items-center w-full gap-5 max-md:gap-3 max-sm:gap-1">
         <div id="betell-wrapper" class="w-full flex justify-center">
           <div id="betell-scale" class="text-primary">
             <Fragment set:html={BetellSvg} />
@@ -63,33 +63,228 @@ import BetellSvg from '../assets/betell.svg?raw';
 <script>
   import { gsap, ScrollTrigger } from '../lib/gsap';
 
-  const heroPin = document.getElementById('hero-pin');
-  const heroText = document.getElementById('hero-text');
-  const trigger = document.getElementById('hero-trigger');
-  const betellScale = document.getElementById('betell-scale');
-  if (!trigger) throw new Error('Hero trigger no encontrado');
-
-  const heroTextY = () => {
-    const heroHeight = trigger.getBoundingClientRect().height;
-    return Math.min(heroHeight * 0.35, 450);
+  const CONFIG = {
+    textDistanceVH: {
+      mobile: 0.25,
+      tablet: 0.25,
+      laptopMdpi: 0.38,
+      laptopSm: 0.5,
+      laptopLg: 0.42,
+      desktop: 0.45,
+    },
+    heightMultiplier: {
+      mobile: 1.2,
+      tablet: 1.2,
+      laptopMdpi: 1.35,
+      laptopSm: 1.6,
+      laptopLg: 1.4,
+      desktop: 1.4,
+    },
+    scale: {
+      mobile: 2.8,
+      tablet: 2.6,
+      laptopMdpi: 2.8,
+      laptopSm: 2.9,
+      laptopLg: 3.0,
+      desktop: 3.5,
+    },
   };
 
-  gsap.set(betellScale, { scaleY: 1, transformOrigin: 'center top' });
-  gsap.set(heroText, { y: 0, letterSpacing: '0.05em' });
+  type DeviceValues = {
+    device: string;
+    scale: number;
+    textY: number;
+    totalHeight: number;
+    paddingTop: number;
+    vw: number;
+    vh: number;
+  };
 
-  const anim = gsap.timeline({
-    scrollTrigger: {
-      trigger: trigger,
-      pin: heroPin,
-      start: 'top top',
-      end: '+=50%',
-      scrub: 1,
-      invalidateOnRefresh: true,
-      pinSpacing: false,
-    },
-  });
+  const getElementPaddingTop = (): number => {
+    const trigger = document.getElementById('hero-trigger');
+    if (!trigger) return 0;
 
-  anim.to(betellScale, { scaleY: 3, duration: 1.5, ease: 'none' }, 0);
-  anim.to(heroText, { y: heroTextY(), duration: 1.5, ease: 'none' }, 0);
-  anim.to(heroText, { letterSpacing: '0.5em', duration: 1.5, ease: 'none' }, 0);
+    const computedStyle = window.getComputedStyle(trigger);
+    const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+
+    if (window.innerWidth <= 1024) {
+      const pageContent = document.getElementById('page-content');
+      if (pageContent) {
+        const pageContentStyle = window.getComputedStyle(pageContent);
+        return paddingTop + (parseFloat(pageContentStyle.paddingTop) || 0);
+      }
+    }
+
+    return paddingTop;
+  };
+
+  const calculateValues = (): DeviceValues => {
+    const vw = document.documentElement.clientWidth || window.innerWidth;
+    const vh = document.documentElement.clientHeight || window.innerHeight;
+    const paddingTop = getElementPaddingTop();
+
+    let device: string, scale: number, textDistanceVH: number, heightMultiplier: number;
+
+    if (vw <= 640) {
+      device = 'mobile';
+      scale = CONFIG.scale.mobile;
+      textDistanceVH = CONFIG.textDistanceVH.mobile;
+      heightMultiplier = CONFIG.heightMultiplier.mobile;
+    } else if (vw <= 1024) {
+      device = 'tablet';
+      scale = CONFIG.scale.tablet;
+      textDistanceVH = CONFIG.textDistanceVH.tablet;
+      heightMultiplier = CONFIG.heightMultiplier.tablet;
+    } else if (vw <= 1280) {
+      device = 'laptopMdpi';
+      scale = CONFIG.scale.laptopMdpi;
+      textDistanceVH = CONFIG.textDistanceVH.laptopMdpi;
+      heightMultiplier = CONFIG.heightMultiplier.laptopMdpi;
+    } else if (vw <= 1366) {
+      device = 'laptopSm';
+      scale = CONFIG.scale.laptopSm;
+      textDistanceVH = CONFIG.textDistanceVH.laptopSm;
+      heightMultiplier = CONFIG.heightMultiplier.laptopSm;
+    } else if (vw <= 1600) {
+      device = 'laptopLg';
+      scale = CONFIG.scale.laptopLg;
+      textDistanceVH = CONFIG.textDistanceVH.laptopLg;
+      heightMultiplier = CONFIG.heightMultiplier.laptopLg;
+    } else {
+      device = 'desktop';
+      scale = CONFIG.scale.desktop;
+      textDistanceVH = CONFIG.textDistanceVH.desktop;
+      heightMultiplier = CONFIG.heightMultiplier.desktop;
+    }
+
+    return {
+      device,
+      scale,
+      textY: vh * textDistanceVH,
+      totalHeight: vh * heightMultiplier,
+      paddingTop,
+      vw,
+      vh,
+    };
+  };
+
+  const setHeroHeight = (values: DeviceValues): void => {
+    const trigger = document.getElementById('hero-trigger');
+    if (trigger) {
+      trigger.style.minHeight = `${values.totalHeight}px`;
+    }
+  };
+
+  const createHeroAnimation = (values: DeviceValues): GSAPTimeline | null => {
+    const heroPin = document.getElementById('hero-pin');
+    const heroText = document.getElementById('hero-text');
+    const trigger = document.getElementById('hero-trigger');
+    const betellScale = document.getElementById('betell-scale');
+    const pageContent = document.getElementById('page-content');
+
+    if (!trigger || !heroPin || !heroText || !betellScale) return null;
+
+    const existingTrigger = ScrollTrigger.getById('hero-animation');
+    if (existingTrigger) existingTrigger.kill();
+
+    gsap.set([betellScale, heroText], {
+      scaleY: 1,
+      y: 0,
+      letterSpacing: values.vw <= 640 ? '0.05em' : '0.1em',
+      transformOrigin: 'center top',
+      immediateRender: true,
+    });
+
+    let startPosition = 'top top';
+
+    if (values.vw <= 1024 && pageContent) {
+      const pageContentStyle = window.getComputedStyle(pageContent);
+      const pageContentPadding = parseFloat(pageContentStyle.paddingTop) || 0;
+
+      if (pageContentPadding > 0) {
+        const extraOffset = 20;
+        startPosition = `top-=${pageContentPadding + extraOffset}px top`;
+      }
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        id: 'hero-animation',
+        trigger: trigger,
+        pin: heroPin,
+        start: startPosition,
+        end: '+=50%',
+        scrub: 1,
+        invalidateOnRefresh: true,
+        pinSpacing: false,
+      },
+    });
+
+    tl.to(
+      betellScale,
+      {
+        scaleY: values.scale,
+        duration: 1,
+        ease: 'none',
+      },
+      0
+    );
+
+    tl.to(
+      heroText,
+      {
+        y: values.textY,
+        duration: 1,
+        ease: 'none',
+      },
+      0
+    );
+
+    tl.to(
+      heroText,
+      {
+        letterSpacing: values.vw <= 640 ? '0.2em' : values.vw <= 1024 ? '0.3em' : '0.4em',
+        duration: 1,
+        ease: 'none',
+      },
+      0
+    );
+
+    return tl;
+  };
+
+  const initHero = (): void => {
+    setTimeout(() => {
+      const values = calculateValues();
+      setHeroHeight(values);
+
+      requestAnimationFrame(() => {
+        createHeroAnimation(values);
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.refresh();
+        }
+      });
+    }, 100);
+  };
+
+  if (typeof ScrollTrigger !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHero);
+    } else {
+      initHero();
+    }
+
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    window.addEventListener('resize', () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+
+      resizeTimeout = setTimeout(() => {
+        const values = calculateValues();
+        setHeroHeight(values);
+        createHeroAnimation(values);
+        ScrollTrigger.refresh();
+      }, 300);
+    });
+  }
 </script>
