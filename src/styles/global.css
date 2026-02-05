@@ -440,3 +440,47 @@ body.nav-open #page-content {
 body {
   background: var(--bg-page) !important;
 }
+
+@media (max-width: 1023px) {
+  .projects.list-view .project-card .project-image {
+    display: none;
+  }
+
+  .projects.list-view .project-card h3 {
+    flex: 0 0 50%;
+    @apply text-primary font-inconsolata font-500 text-h3 tracking-wide text-center;
+  }
+
+  .projects.list-view .project-card span {
+    flex: 0 0 50%;
+    @apply text-primary font-outfit text-caption tracking-wider font-600 text-center;
+  }
+
+  .projects.list-view .project-card p {
+    @apply hidden;
+  }
+
+  .projects.list-view a .project-card {
+    @apply justify-center;
+  }
+}
+
+@media (max-width: 767px) {
+  .projects.grid-view {
+    @apply grid grid-cols-1 gap-5;
+  }
+
+  .projects.list-view .project-card h3 {
+    flex: 0 0 100%;
+    @apply text-primary font-inconsolata font-500 text-h3 tracking-wide text-center;
+  }
+
+  .projects.list-view .project-card span {
+    flex: 0 0 100%;
+    @apply text-primary font-outfit text-caption tracking-wider font-600 text-center;
+  }
+
+  .projects.list-view a .project-card {
+    @apply justify-center flex-col gap-2 items-center px-8;
+  }
+}
