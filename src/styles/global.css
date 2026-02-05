@@ -292,16 +292,6 @@ body.nav-open #page-content {
   grid-column: span 2;
 }
 
-.projects.grid-view .project-featured .project-image {
-  aspect-ratio: 18 / 9;
-}
-
-.projects.grid-view .project-featured img {
-  object-position: center center;
-}
-
-/* ===== FEATURED PROJECT (GRID VIEW) ===== */
-
 .projects.grid-view .project-featured h3 {
   @apply text-h4;
 }
@@ -482,5 +472,21 @@ body {
 
   .projects.list-view a .project-card {
     @apply justify-center flex-col gap-2 items-center px-8;
+  }
+
+  .projects.grid-view .project-featured {
+    grid-column: span 1;
+  }
+
+  .projects.grid-view .project-featured h3 {
+    @apply text-muted font-inconsolata text-caption bg-secondary p-2 tracking-wider rounded-lg w-fit font-800;
+  }
+
+  .projects.grid-view .project-featured span {
+    @apply text-muted font-outfit text-sm bg-secondary p-1 px-2 rounded-lg w-fit font-600;
+  }
+
+  .projects.grid-view .project-featured p {
+    @apply text-muted font-outfit text-caption bg-secondary p-2 tracking-wide rounded-lg w-fit font-500 italic;
   }
 }

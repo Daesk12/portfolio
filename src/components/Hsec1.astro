@@ -5,7 +5,10 @@ import type { Project } from '../data/projects';
 const totalProjects = projects.length;
 ---
 
-<section id="hsec1" class="w-full h-auto p-20 flex flex-col gap-20">
+<section
+  id="hsec1"
+  class="w-full h-auto p-20 flex flex-col gap-20
+  max-lg:px-12 max-md:px-8 max-md:gap-8">
   <div class="flex flex-col gap-5 items-center">
     <h1 class="text-herotitle font-900 tracking-wider font-outfit text-primary text-center">
       TRABAJOS
@@ -16,21 +19,27 @@ const totalProjects = projects.length;
     </p>
   </div>
 
-  <div class="flex flex-col gap-10">
-    <div class="flex items-center justify-between">
+  <div class="flex flex-col gap-10
+  max-md:gap-8">
+    <div class="flex items-center justify-between
+    max-md:flex-col max-md:gap-5">
       <h2
         class="uppercase text-primary font-manrope font-700 text-caption tracking-wider underline underline-offset-8">
         PROYECTOS [{totalProjects}]
       </h2>
-      <div class="flex gap-5 justify-center items-center w-2/5">
+      <div
+        class="flex gap-5 justify-center items-center w-2/5
+      max-md:w-full max-md:gap-2 max-md:flex-col">
         <button
           data-view="grid"
-          class="boton-activo p-2 font-outfit font-500 text-button w-2/5 rounded-lg border-2 border-secondary text-primary">
+          class="boton-activo p-2 font-outfit font-500 text-button w-2/5 rounded-lg border-2 border-secondary text-primary
+          max-md:w-full">
           Grid
         </button>
         <button
           data-view="list"
-          class="boton-activo p-2 font-outfit font-500 text-button w-2/5 rounded-lg border-2 border-secondary text-primary">
+          class="boton-activo p-2 font-outfit font-500 text-button w-2/5 rounded-lg border-2 border-secondary text-primary
+          max-md:w-full">
           Lista
         </button>
       </div>
