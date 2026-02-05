@@ -1,28 +1,63 @@
----
-
----
-
 <section
   data-theme="dark"
   id="sec1"
-  class="bg-surface w-full p-20 flex flex-col items-center overflow-y-hidden">
-  <div id="sec1-content" class="flex flex-col gap-5 items-center">
-    <h1
-      id="mantxt"
-      class="text-center text-h1 text-muted font-outfit font-700 leading-sm kerning-wider uppercase">
-      Diseño para conectar, creando mensajes que se entienden sin explicarse de más, desde la
-      cercanía, la accesibilidad y el amor hacia las personas.
-    </h1>
-    <h2
-      id="manprog"
-      class="text-center text-h1 text-muted font-outfit font-900 leading-l kerning-wider">
-      0%
-    </h2>
+  class="bg-surface w-full h-screen flex items-center justify-center p-6 md:p-10 lg:p-12 xl:p-16 2xl:p-20">
+  <div id="sec1-content" class="flex flex-col items-center w-full max-w-5xl px-4">
+    <div class="w-full mb-6 md:mb-8">
+      <h1
+        id="mantxt"
+        class="text-center text-muted font-outfit font-700 leading-tight md:leading-snug kerning-wider uppercase
+        text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+        Diseño para conectar, creando mensajes que se entienden sin explicarse de más, desde la
+        cercanía, la accesibilidad y el amor hacia las personas.
+      </h1>
+    </div>
+    <div>
+      <h2
+        id="manprog"
+        class="text-center text-muted font-outfit font-900 leading-tight kerning-wider
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+        0%
+      </h2>
+    </div>
   </div>
 </section>
 
 <script>
   import { gsap, ScrollTrigger } from '../lib/gsap';
+
+  interface Config {
+    speed: number;
+    scrub: number;
+    scrollPerWord: number;
+    markers?: boolean;
+  }
+
+  interface Preset {
+    speed: number;
+    scrollPerWord: number;
+  }
+
+  interface ControlSec1 {
+    setSpeed: (nuevaVelocidad: number) => void;
+    setScrollPerWord: (px: number) => void;
+    estado: () => Record<string, string | number>;
+    valoresRecomendados: Record<string, Preset>;
+    aplicarPreset: (preset: string) => void;
+  }
+
+  declare global {
+    interface Window {
+      controlSec1: ControlSec1;
+    }
+  }
+
+  const CONFIG: Config = {
+    speed: 0.1,
+    scrub: 1.2,
+    scrollPerWord: 80,
+    markers: false,
+  };
 
   const sec1 = document.getElementById('sec1');
   const content = document.getElementById('sec1-content');
@@ -33,58 +68,140 @@
     throw new Error('Elementos no encontrados en sec1');
   }
 
-  // Separar texto en palabras
-  const palabras = leer.textContent.split(' ');
+  const textoOriginal = leer.textContent?.trim() || '';
+  const palabras = textoOriginal.split(/\s+/);
+
   leer.textContent = '';
+  leer.className =
+    'text-center text-muted font-outfit font-700 leading-tight md:leading-snug kerning-wider uppercase flex flex-wrap justify-center gap-x-2 md:gap-x-3 text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl';
+
   palabras.forEach((palabra, i) => {
     const span = document.createElement('span');
-    span.textContent = palabra + ' ';
-    span.style.opacity = i === 0 ? '1' : '0.3';
+    span.textContent = palabra;
+    span.className = 'inline-block opacity-20';
     leer.appendChild(span);
+
+    if (i < palabras.length - 1) {
+      leer.appendChild(document.createTextNode(' '));
+    }
   });
 
   const spans = leer.querySelectorAll('span');
-  gsap.set(spans, { opacity: (i) => (i === 0 ? 1 : 0.3) });
+  gsap.set(spans[0], { opacity: 1 });
 
-  const createScrollTrigger = () => {
-    const viewportHeight = window.innerHeight;
-    const contentHeight = content.scrollHeight;
+  let anim: gsap.core.Timeline | null = null;
+  let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
-    const scrollDistance = Math.max(contentHeight - viewportHeight, contentHeight * 0.5);
+  const crearAnimacion = (): gsap.core.Timeline => {
+    const palabrasCount = palabras.length;
+    const scrollDistance = palabrasCount * CONFIG.scrollPerWord;
 
-    return gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: sec1,
-          start: 'top+=50px top',
-          end: `+=${scrollDistance}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: 1,
-        },
-      })
-      .to(spans, {
-        opacity: 1,
-        stagger: {
-          each: 0.03,
-        },
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: sec1,
+        start: 'top top',
+        end: `+=${scrollDistance}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: CONFIG.scrub,
+        markers: CONFIG.markers,
+        invalidateOnRefresh: true,
+      },
+    });
 
-        ease: 'none',
-        onUpdate: function () {
-          progresst.textContent = `${Math.round(this.progress() * 100)}%`;
-        },
-      });
+    timeline.to(spans, {
+      opacity: 1,
+      stagger: {
+        each: CONFIG.speed,
+        from: 'start',
+        ease: 'sine.out',
+      },
+      ease: 'sine.inOut',
+      onUpdate: function () {
+        const progress = Math.min(Math.round(this.progress() * 100), 100);
+        progresst.textContent = `${progress}%`;
+      },
+      onComplete: () => {
+        progresst.textContent = '100%';
+      },
+    });
+
+    return timeline;
   };
 
-  let anim = createScrollTrigger();
-
-  const refreshTrigger = () => {
-    anim.kill();
-    ScrollTrigger.refresh(true);
-    anim = createScrollTrigger();
+  const init = (): void => {
+    setTimeout(() => {
+      if (anim?.scrollTrigger) {
+        anim.scrollTrigger.kill();
+      }
+      anim = crearAnimacion();
+      ScrollTrigger.refresh();
+    }, 100);
   };
 
-  window.addEventListener('resize', refreshTrigger);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
-  (window as any).refreshSec1Scroll = refreshTrigger;
+  window.addEventListener('resize', () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      if (anim?.scrollTrigger) anim.scrollTrigger.kill();
+      anim = crearAnimacion();
+      ScrollTrigger.refresh();
+    }, 300);
+  });
+
+  const valoresRecomendados: Record<string, Preset> = {
+    lento: { speed: 0.2, scrollPerWord: 100 },
+    normal: { speed: 0.15, scrollPerWord: 80 },
+    rapido: { speed: 0.08, scrollPerWord: 50 },
+  };
+
+  window.controlSec1 = {
+    setSpeed: (nuevaVelocidad: number): void => {
+      CONFIG.speed = nuevaVelocidad;
+      if (anim?.scrollTrigger) anim.scrollTrigger.kill();
+      anim = crearAnimacion();
+      ScrollTrigger.refresh();
+    },
+
+    setScrollPerWord: (px: number): void => {
+      CONFIG.scrollPerWord = px;
+      if (anim?.scrollTrigger) anim.scrollTrigger.kill();
+      anim = crearAnimacion();
+      ScrollTrigger.refresh();
+    },
+
+    estado: () => ({
+      palabras: palabras.length,
+      velocidadPalabra: `${CONFIG.speed * 1000}ms`,
+      scrollTotal: `${palabras.length * CONFIG.scrollPerWord}px`,
+      progreso: progresst.textContent || '0%',
+      viewport: `${window.innerHeight}px`,
+    }),
+
+    valoresRecomendados,
+
+    aplicarPreset: (preset: string): void => {
+      if (preset in valoresRecomendados) {
+        CONFIG.speed = valoresRecomendados[preset].speed;
+        CONFIG.scrollPerWord = valoresRecomendados[preset].scrollPerWord;
+        if (anim?.scrollTrigger) anim.scrollTrigger.kill();
+        anim = crearAnimacion();
+        ScrollTrigger.refresh();
+      }
+    },
+  };
+
+  export function cleanupSec1(): void {
+    if (anim?.scrollTrigger) {
+      anim.scrollTrigger.kill();
+    }
+    if (resizeTimeout) {
+      clearTimeout(resizeTimeout);
+    }
+  }
 </script>
