@@ -2,25 +2,33 @@
 import GatosecSvg from '../assets/gatosec2.svg';
 ---
 
-<section id="sec2" class="w-full h-screen p-20 flex items-center justify-between">
-  <div id="sec2-cont1" class="w-2/5 flex flex-col gap-7.5">
+<section
+  id="sec2"
+  class="w-full h-screen p-20 flex items-center justify-between
+max-lg:flex-col-reverse max-lg:px-12 max-lg:justify-center max-lg:p-10 max-lg:gap-15 max-md:px-8">
+  <div id="sec2-cont1" class="w-2/5 flex flex-col gap-7.5
+  max-lg:w-full max-lg:items-center">
     <h2
-      class="uppercase text-primary font-manrope font-700 text-caption tracking-wider underline underline-offset-8">
+      class="uppercase text-primary font-manrope font-700 text-caption tracking-wider underline underline-offset-8
+      max-lg:text-center">
       ¿Quien soy?
     </h2>
-    <p class="text-body text-primary/90 font-400 leading-base font-manrope">
+    <p class="text-body text-primary/90 font-400 leading-base font-manrope
+    max-lg:text-center">
       Soy Daniel, un diseñador enfocado en ir más allá de los medios convencionales, trabajo
       principalmente en diseño web, diseño interactivo y proyectos de índole mixta que me permiten
       darle rienda suelta a mi creatividad.
     </p>
     <button
-      class="text-button bg-secondary p-2.5 w-2/5 rounded-lg text-muted tracking-wider font-outfit font-medium cursor-pointer hover:bg-accent hover:text-primary"
+      class="text-button bg-secondary p-2.5 w-2/5 rounded-lg text-muted tracking-wider font-outfit font-medium cursor-pointer hover:bg-accent hover:text-primary
+      max-lg:text-center"
       >Sobre mi</button
     >
   </div>
 
-  <div id="sec2-cont2" class="w-2/5 flex flex-col gap-5 items-center">
-    <GatosecSvg class="w-full h-auto text-primary" />
+  <div id="sec2-cont2" class="w-2/5 flex flex-col gap-5 items-center
+  max-lg:w-full">
+    <GatosecSvg class="w-full h-auto text-primary max-lg:w-2/4 max-md:w-6/10" />
     <p
       class="text-caption tracking-wider uppercase text-primary leading-wide text-center font-700 font-manrope opacity-80">
       MADE IN COLOMBIA <br /> AMANTE DE LA PROGRAMACIÓN Y LOS ANIMALES
