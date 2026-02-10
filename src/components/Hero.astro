@@ -71,6 +71,9 @@ import BetellSvg from '../assets/betell.svg?raw';
       laptopSm: 0.53,
       laptopLg: 0.42,
       desktop: 0.45,
+      screenFHD: 0.44,
+      screen2k: 0.37,
+      screen4k: 0.35,
     },
     heightMultiplier: {
       mobile: 1.2,
@@ -79,6 +82,9 @@ import BetellSvg from '../assets/betell.svg?raw';
       laptopSm: 1.65,
       laptopLg: 1.4,
       desktop: 1.4,
+      screenFHD: 1.3,
+      screen2k: 1.15,
+      screen4k: 1.05,
     },
     scale: {
       mobile: 2.8,
@@ -86,6 +92,9 @@ import BetellSvg from '../assets/betell.svg?raw';
       laptopMdpi: 2.8,
       laptopSm: 2.9,
       laptopLg: 3.0,
+      screenFHD: 3.4,
+      screen2k: 3.8,
+      screen4k: 5,
       desktop: 3.5,
     },
   };
@@ -150,6 +159,21 @@ import BetellSvg from '../assets/betell.svg?raw';
       scale = CONFIG.scale.laptopLg;
       textDistanceVH = CONFIG.textDistanceVH.laptopLg;
       heightMultiplier = CONFIG.heightMultiplier.laptopLg;
+    } else if (vw <= 1920) {
+      device = 'screenFHD';
+      scale = CONFIG.scale.screenFHD;
+      textDistanceVH = CONFIG.textDistanceVH.screenFHD;
+      heightMultiplier = CONFIG.heightMultiplier.screenFHD;
+    } else if (vw <= 2560) {
+      device = 'screen2k';
+      scale = CONFIG.scale.screen2k;
+      textDistanceVH = CONFIG.textDistanceVH.screen2k;
+      heightMultiplier = CONFIG.heightMultiplier.screen2k;
+    } else if (vw <= 3840) {
+      device = 'screen4k';
+      scale = CONFIG.scale.screen4k;
+      textDistanceVH = CONFIG.textDistanceVH.screen4k;
+      heightMultiplier = CONFIG.heightMultiplier.screen4k;
     } else {
       device = 'desktop';
       scale = CONFIG.scale.desktop;
