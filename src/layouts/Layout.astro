@@ -74,7 +74,14 @@ import Contact from '../components/Contact.astro';
         void navInstance.offsetWidth;
 
         // 3. Obtener el ancho REAL del nav (sin transformaciones CSS)
-        const navWidth = navInstance.scrollWidth;
+        let navWidth = Math.round(
+          navInstance.getBoundingClientRect().width || navInstance.scrollWidth
+        );
+        // Fallback: si la medición es inesperadamente pequeña, calcular según breakpoint
+        if (navWidth < 50) {
+          const vw = window.innerWidth;
+          navWidth = Math.round(vw >= 1536 ? vw / 6 : vw / 4);
+        }
         console.log('Ancho REAL del nav:', navWidth);
 
         // 4. Aplicar el ancho como variable CSS
@@ -122,8 +129,16 @@ import Contact from '../components/Contact.astro';
           console.log('Nav cerrado');
         } else {
           // ABRIR nav - mostrar completo
-          const navWidth = navInstance.scrollWidth;
-          setNavOffset(navWidth);
+          const navWidth = Math.round(
+            navInstance.getBoundingClientRect().width || navInstance.scrollWidth
+          );
+          const finalWidth =
+            navWidth < 50
+              ? Math.round(
+                  window.innerWidth >= 1536 ? window.innerWidth / 6 : window.innerWidth / 4
+                )
+              : navWidth;
+          setNavOffset(finalWidth);
           document.body.classList.add('nav-open');
           isOpen = true;
           console.log('Nav abierto - Ancho:', navWidth);
