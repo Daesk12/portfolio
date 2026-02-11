@@ -193,7 +193,7 @@ Aquí mi idea era crear un personaje insensible, quería crear la historia de un
       en: ``,
     },
     sdescription: {
-      es: `Este fue un proyecto que surgió luego de un cadáver exquisito en conjunto con mis amigos, donde creamos un personaje con sus distintas partes del cuerpo, sus armas, sus miedos y su mascota, aquí la historia fluyo por si misma porque me dio mucha ternura lo que salió, por lo que quise hacer un personaje que pese a sus tentáculos y apariencia claramente intimidante fuera más humano y cálido que muchas personas.`,
+      es: `Este fue un proyecto que surgió a partir de un cadáver exquisito, donde se quiso crear un personaje con sus distintas partes del cuerpo, sus armas, sus miedos y su mascota; a partir de esto la narrativa que quise seguir fue la de un personaje que pese a sus tentáculos y apariencia claramente intimidante, fuera más humano y cálido que muchas personas de su historia.`,
       en: ``,
     },
     ddescription: {
