@@ -96,8 +96,9 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
       project.palette && project.palette.length > 0 && (
         <div id="palette" class="grid grid-cols items-center gap-6">
           <div
-            class="grid grid-cols-5 gap-2
+            class="grid grid-cols-5 gap-2 text-primary text-caption text-wider font-manrope font-700
           max-md:grid-cols-1">
+            Paleta de color del proyecto(s):
             {project.palette.map((color) => (
               <button
                 class="h-12 w-full rounded-lg transition hover:scale-y-150 hover:border-accent/50 border border-primary cursor-pointer
@@ -151,7 +152,8 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
                 src={img.src}
                 alt=""
                 loading="lazy"
-                class="media-image w-full aspect-16/10 object-cover rounded-lg"
+                class="media-image w-full aspect-16/10 object-cover rounded-lg
+                max-md:aspect-16/10"
               />
             </div>
           ))
@@ -167,8 +169,7 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
                 src={img.src}
                 alt=""
                 loading="lazy"
-                class="media-image w-full aspect-square object-cover rounded-lg
-                max-md:aspect-16/10"
+                class="media-image w-full aspect-square object-cover rounded-lg"
               />
             </div>
           ))

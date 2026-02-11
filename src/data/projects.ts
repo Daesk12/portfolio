@@ -62,11 +62,11 @@ export const projects: Project[] = [
       role: 'main',
     },
     palette: [
-      { id: 'p1', hex: '#D94F3D' },
-      { id: 'p2', hex: '#F2A65A' },
-      { id: 'p3', hex: '#3A7CA5' },
-      { id: 'p4', hex: '#2E2E2E' },
-      { id: 'p5', hex: '#E6E1D6' },
+      { id: 'p1', hex: '#FFEB3B' },
+      { id: 'p2', hex: '#FF3A9F' },
+      { id: 'p3', hex: '#2F5BFF' },
+      { id: 'p4', hex: '#2DD36A' },
+      { id: 'p5', hex: '#E7E2DA' },
     ],
     media: [
       { id: 'm2', src: '/images/nos-otros/02.webp', role: 'medium' },
