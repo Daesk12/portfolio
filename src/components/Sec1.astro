@@ -55,7 +55,7 @@
   const CONFIG: Config = {
     speed: 0.1,
     scrub: 1.2,
-    scrollPerWord: 80,
+    scrollPerWord: 20,
     markers: false,
   };
 
@@ -91,6 +91,8 @@
 
   let anim: gsap.core.Timeline | null = null;
   let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  let lastInnerWidth: number = window.innerWidth;
+  let lastInnerHeight: number = window.innerHeight;
 
   const crearAnimacion = (): gsap.core.Timeline => {
     const palabrasCount = palabras.length;
@@ -148,6 +150,19 @@
   window.addEventListener('resize', () => {
     if (resizeTimeout) clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      const widthChanged = newWidth !== lastInnerWidth;
+      const heightDiff = Math.abs(newHeight - lastInnerHeight);
+      // Ignore small height-only changes (mobile address bar show/hide).
+      const heightChanged = heightDiff > Math.max(150, lastInnerHeight * 0.15);
+
+      if (!widthChanged && !heightChanged) return;
+
+      lastInnerWidth = newWidth;
+      lastInnerHeight = newHeight;
+
       if (anim?.scrollTrigger) anim.scrollTrigger.kill();
       anim = crearAnimacion();
       ScrollTrigger.refresh();
