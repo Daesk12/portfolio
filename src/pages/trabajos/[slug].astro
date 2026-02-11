@@ -94,11 +94,13 @@ const html = project.ddescription ? marked.parse(dedent(project.ddescription[lan
     </div>
     {
       project.palette && project.palette.length > 0 && (
-        <div id="palette" class="grid grid-cols items-center gap-6">
+        <div
+          id="palette"
+          class="grid grid-cols items-center gap-6 text-primary text-caption text-wider font-manrope font-700">
+          Paleta de color del proyecto(s):
           <div
-            class="grid grid-cols-5 gap-2 text-primary text-caption text-wider font-manrope font-700
+            class="grid grid-cols-5 gap-2 
           max-md:grid-cols-1">
-            Paleta de color del proyecto(s):
             {project.palette.map((color) => (
               <button
                 class="h-12 w-full rounded-lg transition hover:scale-y-150 hover:border-accent/50 border border-primary cursor-pointer
